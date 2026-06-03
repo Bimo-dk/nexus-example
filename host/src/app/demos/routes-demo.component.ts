@@ -38,9 +38,8 @@ export const routes: Routes = catalog.map((e) =&gt;
           <h3>Available routes</h3>
           @for (e of catalog.entries(); track e.remote + ':' + e.expose) {
             <a [routerLink]="['/demos/routes', e.expose]" routerLinkActive="active">
-              <span class="icon">{{ e.icon || '·' }}</span>
               <span class="title">{{ e.title }}</span>
-              <code class="path">/demos/routes/{{ e.expose }}</code>
+              <code class="path">{{ e.remote }}/{{ e.expose }}</code>
             </a>
           } @empty {
             <p class="empty">Catalog empty — start a remote with &#64;NexusComponent metadata.</p>
@@ -61,11 +60,11 @@ export const routes: Routes = catalog.map((e) =&gt;
     .layout { display: grid; grid-template-columns: 280px 1fr; gap: 16px; min-height: 480px; }
     aside { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; overflow: auto; max-height: 600px; }
     aside h3 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: #64748b; }
-    aside a { display: grid; grid-template-columns: 20px 1fr; gap: 6px; padding: 8px; border-radius: 6px; text-decoration: none; color: #0f172a; font-size: 13px; align-items: center; }
+    aside a { display: block; padding: 8px 10px; border-radius: 6px; text-decoration: none; color: #0f172a; font-size: 13px; margin-bottom: 2px; }
     aside a:hover { background: #e2e8f0; text-decoration: none; }
     aside a.active { background: #eef2ff; color: #4338ca; font-weight: 600; }
-    aside a .icon { font-size: 14px; }
-    aside a .path { grid-column: 2; font-family: monospace; font-size: 10px; color: #94a3b8; font-weight: 400; }
+    aside a .title { display: block; }
+    aside a .path { display: block; font-family: monospace; font-size: 10px; color: #94a3b8; font-weight: 400; margin-top: 2px; }
     aside .empty { padding: 16px; color: #94a3b8; font-size: 12px; font-style: italic; }
     main { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 24px; }
   `],
@@ -76,16 +75,20 @@ export class RoutesDemoComponent implements OnInit {
   readonly catalog = inject(CatalogService);
 
   ngOnInit(): void {
-    // Register one lazy route per catalog entry under /demos/routes/:expose.
-    // Same shape as @bimo-dk/nexus-runtime's nexusRoute() helper produces.
+    // Register one lazy CHILD route per catalog entry on the parent
+    // `demos/routes` route — so they render inside this component's
+    // <router-outlet />, beside the sidebar.
     const entries = this.catalog.entries();
-    const dynamic: Routes = entries.map((e: CatalogEntry) => ({
-      path: `demos/routes/${e.expose}`,
+    const children: Routes = entries.map((e: CatalogEntry) => ({
+      path: e.expose,
       loadComponent: () => this.loader.loadComponent(e.remote, e.expose),
     }));
 
-    const paths = new Set(dynamic.map((r) => r.path));
-    const others = this.router.config.filter((r) => !paths.has(r.path ?? ''));
-    this.router.resetConfig([...others, ...dynamic]);
+    // Find the existing 'demos/routes' parent, mutate its children, then
+    // call resetConfig so Angular picks up the new child routes.
+    const updated = this.router.config.map((r) =>
+      r.path === 'demos/routes' ? { ...r, children } : r,
+    );
+    this.router.resetConfig(updated);
   }
 }
