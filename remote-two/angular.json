@@ -55,7 +55,8 @@
         "serve": {
           "builder": "@angular-architects/native-federation:build",
           "options": {
-            "target": "remote-two:serve-original"
+            "target": "remote-two:serve-original",
+            "dev": true
           }
         },
         "serve-original": {

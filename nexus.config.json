@@ -20,12 +20,12 @@
     },
     "remotes": {
       "remoteOne": {
-        "port": 8666,
+        "port": 4200,
         "path": "./remote-one",
         "autostart": false
       },
       "remoteTwo": {
-        "port": 8671,
+        "port": 4300,
         "path": "./remote-two",
         "autostart": false
       }
