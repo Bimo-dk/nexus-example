@@ -79,7 +79,8 @@ services:
       context: ./host
       args:
         NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
-        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+      secrets:
+        - node_auth_token
     container_name: nexus-example-host
     expose:
       - "80"
@@ -115,3 +116,9 @@ volumes:
 networks:
   nexus-net:
     driver: bridge
+
+# BuildKit secrets — token læses fra .env's NODE_AUTH_TOKEN, mountes ind i build
+# men gemmes ALDRIG i image-layer eller build-log.
+secrets:
+  node_auth_token:
+    environment: NODE_AUTH_TOKEN
