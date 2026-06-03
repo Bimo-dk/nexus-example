@@ -15,7 +15,7 @@ import { NexusComponent } from './nexus-component.local';
   template: `
     <section>
       <header>
-        <h2>Pattern 3 — On-demand (@if + tag)</h2>
+        <h2>Pattern 3 — On-demand (&#64;if + tag)</h2>
         <p>Toggle a signal to mount the tag. The network fetch only happens when the tag exists in the DOM.</p>
       </header>
       <div class="grid">
