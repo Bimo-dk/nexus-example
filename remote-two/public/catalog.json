@@ -1,0 +1,240 @@
+{
+  "remote": "remoteTwo",
+  "generatedAt": "2026-06-03T19:56:30.002Z",
+  "entries": [
+    {
+      "remote": "remoteTwo",
+      "expose": "CodeEditor",
+      "className": "CodeEditorComponent",
+      "title": "Code Editor",
+      "description": "Mini code textarea with stats and actions",
+      "category": "input",
+      "tags": [
+        "code",
+        "editor"
+      ],
+      "icon": "code",
+      "inputs": {
+        "filename": {
+          "type": "string",
+          "default": "example.ts"
+        },
+        "initial": {
+          "type": "string",
+          "description": "Initial code content"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "ColorPicker",
+      "className": "ColorPickerComponent",
+      "title": "Color Picker",
+      "description": "HSL color picker with hex preview",
+      "category": "input",
+      "tags": [
+        "color",
+        "picker"
+      ],
+      "icon": "palette",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Color picker"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "CommandPalette",
+      "className": "CommandPaletteComponent",
+      "title": "Command Palette",
+      "description": "Fuzzy-search command launcher",
+      "category": "navigation",
+      "tags": [
+        "command",
+        "palette",
+        "search"
+      ],
+      "icon": "keyboard_command_key",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Command palette"
+        },
+        "commands": {
+          "type": "array",
+          "description": "Array of { id, label, icon, shortcut? }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "DateRangePicker",
+      "className": "DateRangePickerComponent",
+      "title": "Date Range Picker",
+      "description": "From/to with preset shortcuts",
+      "category": "input",
+      "tags": [
+        "date",
+        "range",
+        "picker"
+      ],
+      "icon": "date_range",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Date range"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "MultiSelect",
+      "className": "MultiSelectComponent",
+      "title": "Multi Select",
+      "description": "Filterable checkbox list",
+      "category": "input",
+      "tags": [
+        "select",
+        "checkbox"
+      ],
+      "icon": "checklist",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Pick technologies"
+        },
+        "options": {
+          "type": "array",
+          "description": "Array of option strings"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "Rating",
+      "className": "RatingComponent",
+      "title": "Star Rating",
+      "description": "Interactive 5-star rating",
+      "category": "input",
+      "tags": [
+        "rating",
+        "stars"
+      ],
+      "icon": "star",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Rate this"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "SearchAutocomplete",
+      "className": "SearchAutocompleteComponent",
+      "title": "Search Autocomplete",
+      "description": "Text input with dropdown suggestions",
+      "category": "input",
+      "tags": [
+        "search",
+        "autocomplete"
+      ],
+      "icon": "search",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Search component"
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Type to search..."
+        },
+        "options": {
+          "type": "array",
+          "description": "Array of selectable strings"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "SliderRange",
+      "className": "SliderRangeComponent",
+      "title": "Slider Range",
+      "description": "Dual-handle numeric range",
+      "category": "input",
+      "tags": [
+        "slider",
+        "range"
+      ],
+      "icon": "tune",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Price range"
+        },
+        "min": {
+          "type": "number",
+          "default": 0
+        },
+        "max": {
+          "type": "number",
+          "default": 1000
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "TagInput",
+      "className": "TagInputComponent",
+      "title": "Tag Input",
+      "description": "Add/remove chips with keyboard",
+      "category": "input",
+      "tags": [
+        "tags",
+        "chips"
+      ],
+      "icon": "tag",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Tags"
+        },
+        "initial": {
+          "type": "array",
+          "description": "Initial tag values"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteTwo",
+      "expose": "TodoList",
+      "className": "TodoListComponent",
+      "title": "Todo List",
+      "description": "Add / check / delete tasks",
+      "category": "input",
+      "tags": [
+        "todo",
+        "list"
+      ],
+      "icon": "task_alt",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Tasks"
+        }
+      },
+      "experimental": false
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from 
 import { LocalNexusService } from './local-nexus.service';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
-import { DemoDashboardComponent } from './demos/demo-dashboard.component';
+import { CatalogService } from './demos/catalog.local.service';
 
 // Capture original URL at module evaluation time — BEFORE Angular's router has
 // a chance to rewind it on its initial (failed) navigation. Module evaluation
@@ -232,6 +232,7 @@ const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
 export class AppComponent implements OnInit {
   readonly nexus = inject(LocalNexusService);
   private readonly health = inject(HealthService);
+  private readonly catalog = inject(CatalogService);
   private readonly router = inject(Router);
 
   async ngOnInit(): Promise<void> {
@@ -243,6 +244,7 @@ export class AppComponent implements OnInit {
 
     await this.nexus.initialize('/api', 'dev-token-change-in-production');
     this.health.start();
+    await this.catalog.refresh();
 
     console.log(`[host-shell] re-navigating to ${requestedUrl}`);
     const ok = await this.router.navigateByUrl(requestedUrl, { replaceUrl: true }).catch((err: unknown) => {
@@ -262,13 +264,14 @@ export class AppComponent implements OnInit {
     const staticRoutes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'demos', component: DemoDashboardComponent },
+      { path: 'demos', loadComponent: () => import('./demos/demo-index.component').then((m) => m.DemoIndexComponent) },
+      { path: 'demos/routes', loadComponent: () => import('./demos/routes-demo.component').then((m) => m.RoutesDemoComponent) },
+      { path: 'demos/manual', loadComponent: () => import('./demos/manual-demo.component').then((m) => m.ManualDemoComponent) },
+      { path: 'demos/tag', loadComponent: () => import('./demos/tag-demo.component').then((m) => m.TagDemoComponent) },
     ];
     const staticPaths = new Set(staticRoutes.map((r) => r.path));
     const dynamic = this.router.config.filter((r) => !staticPaths.has(r.path) && r.path !== '**');
     this.router.resetConfig([...staticRoutes, ...dynamic, { path: '**', redirectTo: 'dashboard' }]);
-    // Re-navigate to the current URL so the freshly-registered route picks up
-    this.router.navigateByUrl(this.router.url, { replaceUrl: true }).catch(() => {});
   }
 
   healthStatus(name: string): string {
