@@ -28,6 +28,9 @@ services:
       PORT: 3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       ALLOWED_ORIGINS: '*'
+      # Format: name=url,name=url. Registry pinger disse hvert HEALTH_CHECK_INTERVAL_MS
+      SYSTEM_SERVICES: gateway=http://gateway/health,host=http://host/health,portal=http://portal/health
+      HEALTH_CHECK_INTERVAL_MS: '30000'
     volumes:
       - registry-data:/app/data
     healthcheck:
