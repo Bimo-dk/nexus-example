@@ -39,7 +39,8 @@ export class LocalNexusService {
   async initialize(registryUrl: string, nexusToken: string): Promise<void> {
     let remotes: RemoteRecord[] = [];
     try {
-      const headers = nexusToken ? { 'X-Nexus-Token': nexusToken } : {};
+      const headers: Record<string, string> = {};
+      if (nexusToken) headers['X-Nexus-Token'] = nexusToken;
       const res = await firstValueFrom(
         this.http.get<{ remotes: RemoteRecord[] }>(`${registryUrl.replace(/\/$/, '')}/remotes`, { headers }),
       );
