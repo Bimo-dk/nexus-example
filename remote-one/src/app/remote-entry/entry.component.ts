@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { NexusRemote } from '@bimo-dk/nexus-build';
+import { NexusRemote } from '../nexus-remote.local';
 import { environment } from '../../environments/environment';
 
 @NexusRemote()

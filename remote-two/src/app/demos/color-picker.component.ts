@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '@bimo-dk/nexus-build';
+import { NexusRemote } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'ColorPicker' })
 @Component({

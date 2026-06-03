@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '@bimo-dk/nexus-build';
+import { NexusRemote } from '../nexus-remote.local';
 
 interface Pill { label: string; value: string; tone: 'ok' | 'warn' | 'err' | 'info'; }
 

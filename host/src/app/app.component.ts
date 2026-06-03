@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from '@angular/router';
 import { DynamicNexusService, RegistryService } from '@bimo-dk/nexus-runtime';
 import { HealthService } from './services/health.service';
+import { DashboardComponent } from './components/dashboard.component';
 
 @Component({
   selector: 'app-root',
@@ -224,9 +225,33 @@ export class AppComponent implements OnInit {
   readonly nexus = inject(DynamicNexusService);
   readonly registry = inject(RegistryService);
   private readonly health = inject(HealthService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
+    this.registerStaticRoutes();
     this.health.start();
+  }
+
+  /**
+   * When the host is loaded via Native Federation (in the gateway), the host's
+   * provideRouter(routes) call from app.config.ts never runs. We must add the
+   * static host routes (/dashboard, /demos) into the gateway's router at runtime,
+   * preserving any dynamic routes DynamicNexusService has already added.
+   */
+  private registerStaticRoutes(): void {
+    const staticRoutes: Routes = [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      { path: 'dashboard', component: DashboardComponent },
+      {
+        path: 'demos',
+        loadComponent: () => import('./demos/demo-dashboard.component').then((m) => m.DemoDashboardComponent),
+      },
+    ];
+    const staticPaths = new Set(staticRoutes.map((r) => r.path));
+    const dynamic = this.router.config.filter((r) => !staticPaths.has(r.path) && r.path !== '**');
+    this.router.resetConfig([...staticRoutes, ...dynamic, { path: '**', redirectTo: 'dashboard' }]);
+    // Re-navigate to the current URL so the freshly-registered route picks up
+    this.router.navigateByUrl(this.router.url, { replaceUrl: true }).catch(() => {});
   }
 
   healthStatus(name: string): string {

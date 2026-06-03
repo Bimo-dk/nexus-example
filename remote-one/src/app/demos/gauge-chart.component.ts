@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote } from '@bimo-dk/nexus-build';
+import { NexusRemote } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'GaugeChart' })
 @Component({
