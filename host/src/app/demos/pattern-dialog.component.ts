@@ -46,7 +46,7 @@ export class PatternDialogComponent {
   readonly slices = PATTERN_SLICES.dialog;
   @ViewChild('dialog') dialog!: DemoDialogComponent;
 
-  async open(spec: DemoSpec): Promise<void> {
-    await this.dialog.show(spec);
+  open(spec: DemoSpec): void {
+    this.dialog.show(spec);
   }
 }

@@ -1,39 +1,33 @@
-import { ChangeDetectionStrategy, Component, Type, inject, signal } from '@angular/core';
-import { NgComponentOutlet } from '@angular/common';
-import { ComponentLoaderService } from './component-loader.local';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import type { DemoSpec } from './demo-catalog';
+import { NexusComponent } from './nexus-component.local';
 
 /**
- * A modal-style dialog (no MatDialog dependency to keep host bundle small).
- * Loads the demo component on demand when opened, renders via NgComponentOutlet.
+ * Modal dialog hosting a federated component via <nexus-component>.
+ * The dialog itself owns no loading logic — it just toggles a signal and
+ * lets the tag handle everything.
  */
 @Component({
   selector: 'demo-dialog',
   standalone: true,
-  imports: [NgComponentOutlet],
+  imports: [NexusComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (open() && spec()) {
+    @if (open() && spec(); as s) {
       <div class="backdrop" (click)="close()">
         <div class="modal" (click)="$event.stopPropagation()">
           <header>
             <div>
-              <h3>{{ spec()!.title }}</h3>
-              <p>{{ spec()!.description }} — loaded into a modal via NgComponentOutlet</p>
+              <h3>{{ s.title }}</h3>
+              <p>{{ s.description }}</p>
             </div>
             <button class="x" (click)="close()" aria-label="close">×</button>
           </header>
           <div class="body">
-            @if (loadedComponent(); as cmp) {
-              <ng-container *ngComponentOutlet="cmp" />
-            } @else if (error()) {
-              <div class="err">Failed to load: {{ error() }}</div>
-            } @else {
-              <div class="loading">Loading...</div>
-            }
+            <nexus-component [remote]="s.remote" [expose]="s.expose" />
           </div>
           <footer>
-            <code>{{ spec()!.remote }} / ./{{ spec()!.expose }}</code>
+            <code>&lt;nexus-component remote="{{ s.remote }}" expose="{{ s.expose }}" /&gt;</code>
           </footer>
         </div>
       </div>
@@ -48,31 +42,17 @@ import type { DemoSpec } from './demo-catalog';
     .x { background: none; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: #94a3b8; }
     .x:hover { color: #0f172a; }
     .body { padding: 12px 24px 24px; overflow: auto; flex: 1; }
-    .loading, .err { padding: 24px; text-align: center; color: #94a3b8; }
-    .err { color: #ef4444; }
     footer { padding: 12px 24px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
     footer code { font-family: monospace; }
   `],
 })
 export class DemoDialogComponent {
-  private readonly loader = inject(ComponentLoaderService);
-
   readonly open = signal(false);
   readonly spec = signal<DemoSpec | null>(null);
-  readonly loadedComponent = signal<Type<unknown> | null>(null);
-  readonly error = signal<string | null>(null);
 
-  async show(spec: DemoSpec): Promise<void> {
+  show(spec: DemoSpec): void {
     this.spec.set(spec);
-    this.loadedComponent.set(null);
-    this.error.set(null);
     this.open.set(true);
-    try {
-      const cmp = await this.loader.loadComponent(spec.remote, spec.expose);
-      this.loadedComponent.set(cmp);
-    } catch (err) {
-      this.error.set(err instanceof Error ? err.message : String(err));
-    }
   }
 
   close(): void {
