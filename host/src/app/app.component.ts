@@ -4,6 +4,16 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from 
 import { LocalNexusService } from './local-nexus.service';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
+import { DemoDashboardComponent } from './demos/demo-dashboard.component';
+
+// Capture original URL at module evaluation time — BEFORE Angular's router has
+// a chance to rewind it on its initial (failed) navigation. Module evaluation
+// runs the moment the gateway federation-loads this AppShell, which is still
+// early enough that window.location.pathname is the URL the user actually
+// requested.
+const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
+  ? window.location.pathname + window.location.search + window.location.hash
+  : '/';
 
 @Component({
   selector: 'app-root',
@@ -224,9 +234,22 @@ export class AppComponent implements OnInit {
   private readonly health = inject(HealthService);
   private readonly router = inject(Router);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const requestedUrl = NEXUS_INITIAL_URL;
+    console.log(`[host-shell] ngOnInit: requested=${requestedUrl}  current=${window.location.pathname}  router.url=${this.router.url}`);
+
     this.registerStaticRoutes();
+    console.log(`[host-shell] static routes registered (${this.router.config.length} total)`);
+
+    await this.nexus.initialize('/api', 'dev-token-change-in-production');
     this.health.start();
+
+    console.log(`[host-shell] re-navigating to ${requestedUrl}`);
+    const ok = await this.router.navigateByUrl(requestedUrl, { replaceUrl: true }).catch((err: unknown) => {
+      console.error('[host-shell] navigateByUrl failed', err);
+      return false;
+    });
+    console.log(`[host-shell] navigation result: ${ok}  router.url=${this.router.url}`);
   }
 
   /**
@@ -239,10 +262,7 @@ export class AppComponent implements OnInit {
     const staticRoutes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', component: DashboardComponent },
-      {
-        path: 'demos',
-        loadComponent: () => import('./demos/demo-dashboard.component').then((m) => m.DemoDashboardComponent),
-      },
+      { path: 'demos', component: DemoDashboardComponent },
     ];
     const staticPaths = new Set(staticRoutes.map((r) => r.path));
     const dynamic = this.router.config.filter((r) => !staticPaths.has(r.path) && r.path !== '**');
