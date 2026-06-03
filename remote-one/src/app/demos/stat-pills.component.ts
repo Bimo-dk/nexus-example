@@ -1,9 +1,29 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Pill { label: string; value: string; tone: 'ok' | 'warn' | 'err' | 'info'; }
 
 @NexusRemote({ exposeAs: 'StatPills' })
+@NexusComponent({
+    "title": "Stat Pills",
+    "description": "Row of color-coded stat pills",
+    "category": "data-display",
+    "tags": [
+      "stats",
+      "pill"
+    ],
+    "icon": "circle",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "Cluster snapshot"
+      },
+      "pills": {
+        "type": "array",
+        "description": "Array of { label, value, tone }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-stat-pills',
   standalone: true,

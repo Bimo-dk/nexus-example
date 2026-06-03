@@ -1,7 +1,31 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'SearchAutocomplete' })
+@NexusComponent({
+    "title": "Search Autocomplete",
+    "description": "Text input with dropdown suggestions",
+    "category": "input",
+    "tags": [
+      "search",
+      "autocomplete"
+    ],
+    "icon": "search",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Search component"
+      },
+      "placeholder": {
+        "type": "string",
+        "default": "Type to search..."
+      },
+      "options": {
+        "type": "array",
+        "description": "Array of selectable strings"
+      }
+    }
+  })
 @Component({
   selector: 'demo-search-autocomplete',
   standalone: true,

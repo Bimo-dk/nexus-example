@@ -1,9 +1,30 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Segment { label: string; value: number; color: string; }
 
 @NexusRemote({ exposeAs: 'DonutChart' })
+@NexusComponent({
+    "title": "Donut Chart",
+    "description": "SVG donut with segment legend",
+    "category": "chart",
+    "tags": [
+      "chart",
+      "donut",
+      "svg"
+    ],
+    "icon": "donut_large",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "Traffic source"
+      },
+      "segments": {
+        "type": "array",
+        "description": "Array of { label, value, color }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-donut-chart',
   standalone: true,

@@ -1,7 +1,40 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'GaugeChart' })
+@NexusComponent({
+    "title": "Gauge Chart",
+    "description": "Semi-circular gauge with needle",
+    "category": "chart",
+    "tags": [
+      "gauge",
+      "svg"
+    ],
+    "icon": "speed",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Latency"
+      },
+      "value": {
+        "type": "number",
+        "default": 142,
+        "required": true
+      },
+      "min": {
+        "type": "number",
+        "default": 0
+      },
+      "max": {
+        "type": "number",
+        "default": 500
+      },
+      "unit": {
+        "type": "string",
+        "default": "ms"
+      }
+    }
+  })
 @Component({
   selector: 'demo-gauge-chart',
   standalone: true,

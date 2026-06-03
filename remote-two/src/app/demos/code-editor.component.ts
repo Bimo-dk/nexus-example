@@ -1,7 +1,27 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'CodeEditor' })
+@NexusComponent({
+    "title": "Code Editor",
+    "description": "Mini code textarea with stats and actions",
+    "category": "input",
+    "tags": [
+      "code",
+      "editor"
+    ],
+    "icon": "code",
+    "inputs": {
+      "filename": {
+        "type": "string",
+        "default": "example.ts"
+      },
+      "initial": {
+        "type": "string",
+        "description": "Initial code content"
+      }
+    }
+  })
 @Component({
   selector: 'demo-code-editor',
   standalone: true,

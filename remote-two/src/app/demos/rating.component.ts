@@ -1,7 +1,23 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'Rating' })
+@NexusComponent({
+    "title": "Star Rating",
+    "description": "Interactive 5-star rating",
+    "category": "input",
+    "tags": [
+      "rating",
+      "stars"
+    ],
+    "icon": "star",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Rate this"
+      }
+    }
+  })
 @Component({
   selector: 'demo-rating',
   standalone: true,

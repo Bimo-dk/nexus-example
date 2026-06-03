@@ -1,7 +1,39 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'MetricCard' })
+@NexusComponent({
+    "title": "Metric Card",
+    "description": "Gradient KPI card with trend arrow",
+    "category": "data-display",
+    "tags": [
+      "kpi",
+      "metric"
+    ],
+    "icon": "insights",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Active users",
+        "description": "Card label"
+      },
+      "value": {
+        "type": "string",
+        "default": "12,438",
+        "description": "Big number value"
+      },
+      "trend": {
+        "type": "number",
+        "default": 8.2,
+        "description": "Trend direction (>0 up, <0 down)"
+      },
+      "trendPct": {
+        "type": "number",
+        "default": 8.2,
+        "description": "Trend percentage shown"
+      }
+    }
+  })
 @Component({
   selector: 'demo-metric-card',
   standalone: true,

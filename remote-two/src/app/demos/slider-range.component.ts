@@ -1,7 +1,31 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'SliderRange' })
+@NexusComponent({
+    "title": "Slider Range",
+    "description": "Dual-handle numeric range",
+    "category": "input",
+    "tags": [
+      "slider",
+      "range"
+    ],
+    "icon": "tune",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Price range"
+      },
+      "min": {
+        "type": "number",
+        "default": 0
+      },
+      "max": {
+        "type": "number",
+        "default": 1000
+      }
+    }
+  })
 @Component({
   selector: 'demo-slider-range',
   standalone: true,

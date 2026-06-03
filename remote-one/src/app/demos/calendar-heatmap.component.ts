@@ -1,7 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'CalendarHeatmap' })
+@NexusComponent({
+    "title": "Calendar Heatmap",
+    "description": "Github-style contribution grid",
+    "category": "chart",
+    "tags": [
+      "heatmap",
+      "calendar"
+    ],
+    "icon": "grid_view",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "Last 70 days"
+      },
+      "seed": {
+        "type": "number",
+        "default": 7,
+        "description": "Seed for deterministic demo data"
+      }
+    }
+  })
 @Component({
   selector: 'demo-calendar-heatmap',
   standalone: true,

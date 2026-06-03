@@ -1,9 +1,30 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Activity { icon: string; text: string; time: string; tone?: 'ok' | 'warn' | 'err'; }
 
 @NexusRemote({ exposeAs: 'ActivityFeed' })
+@NexusComponent({
+    "title": "Activity Feed",
+    "description": "Vertical list of recent events with icons",
+    "category": "data-display",
+    "tags": [
+      "feed",
+      "activity",
+      "list"
+    ],
+    "icon": "list_alt",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "Recent activity"
+      },
+      "items": {
+        "type": "array",
+        "description": "Array of { icon, text, time, tone? }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-activity-feed',
   standalone: true,

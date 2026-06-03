@@ -1,9 +1,25 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Todo { id: number; text: string; done: boolean; }
 
 @NexusRemote({ exposeAs: 'TodoList' })
+@NexusComponent({
+    "title": "Todo List",
+    "description": "Add / check / delete tasks",
+    "category": "input",
+    "tags": [
+      "todo",
+      "list"
+    ],
+    "icon": "task_alt",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Tasks"
+      }
+    }
+  })
 @Component({
   selector: 'demo-todo-list',
   standalone: true,

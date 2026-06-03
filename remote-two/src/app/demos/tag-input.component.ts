@@ -1,7 +1,27 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'TagInput' })
+@NexusComponent({
+    "title": "Tag Input",
+    "description": "Add/remove chips with keyboard",
+    "category": "input",
+    "tags": [
+      "tags",
+      "chips"
+    ],
+    "icon": "tag",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Tags"
+      },
+      "initial": {
+        "type": "array",
+        "description": "Initial tag values"
+      }
+    }
+  })
 @Component({
   selector: 'demo-tag-input',
   standalone: true,

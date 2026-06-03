@@ -1,9 +1,29 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Event { time: string; title: string; description: string; tone?: 'ok' | 'warn' | 'err'; }
 
 @NexusRemote({ exposeAs: 'EventTimeline' })
+@NexusComponent({
+    "title": "Event Timeline",
+    "description": "Vertical timeline of events with status dots",
+    "category": "data-display",
+    "tags": [
+      "timeline",
+      "events"
+    ],
+    "icon": "timeline",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "Deployment timeline"
+      },
+      "events": {
+        "type": "array",
+        "description": "Array of { time, title, description, tone? }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-event-timeline',
   standalone: true,

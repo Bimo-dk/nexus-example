@@ -1,7 +1,24 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'DateRangePicker' })
+@NexusComponent({
+    "title": "Date Range Picker",
+    "description": "From/to with preset shortcuts",
+    "category": "input",
+    "tags": [
+      "date",
+      "range",
+      "picker"
+    ],
+    "icon": "date_range",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Date range"
+      }
+    }
+  })
 @Component({
   selector: 'demo-date-range-picker',
   standalone: true,

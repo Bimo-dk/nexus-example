@@ -1,15 +1,14 @@
-// LOCAL fixed copy of @NexusRemote decorator.
-// Inlined here because @bimo-dk/nexus-build@0.1.1 returned the class from its
-// decorator, which made Angular's ngc treat it as replaced and strip ivy
-// metadata (-> "JIT compiler unavailable" at render time).
+// LOCAL copies of @NexusRemote + @NexusComponent decorators.
+// Inlined because we haven't published nexus-build@0.2.0 yet (which exports
+// both via package). When published, delete this file and revert imports to
+// `import { NexusRemote, NexusComponent } from '@bimo-dk/nexus-build'`.
 //
-// nexus-build@0.1.2 ships the fix — once that version is installed in this
-// remote, delete this file and revert imports to `@bimo-dk/nexus-build`.
-//
-// The build-time scanner (nexus-build CLI) detects @NexusRemote(...) calls by
-// AST regardless of import source, so federation.config.json keeps working.
+// The build-time scanner (nexus-build CLI) detects @NexusRemote(...) and
+// @NexusComponent(...) calls by AST regardless of import source, so federation
+// config and catalog manifest still get generated correctly.
 
 const NEXUS_REMOTE_META = Symbol.for('nexus.remote');
+const NEXUS_COMPONENT_META = Symbol.for('nexus.component');
 
 export interface NexusRemoteOptions {
   name?: string;
@@ -17,8 +16,33 @@ export interface NexusRemoteOptions {
   exposeAs?: string;
 }
 
+export type NexusInputType = 'string' | 'number' | 'boolean' | 'object' | 'array';
+export interface NexusInputSpec {
+  type: NexusInputType;
+  default?: unknown;
+  description?: string;
+  required?: boolean;
+  enum?: string[];
+}
+
+export interface NexusComponentOptions {
+  title: string;
+  description?: string;
+  category?: string;
+  tags?: string[];
+  icon?: string;
+  inputs?: Record<string, NexusInputSpec>;
+  experimental?: boolean;
+}
+
 export function NexusRemote(options: NexusRemoteOptions = {}): ClassDecorator {
   return ((target: object): void => {
     (target as Record<symbol, unknown>)[NEXUS_REMOTE_META] = options;
+  }) as ClassDecorator;
+}
+
+export function NexusComponent(options: NexusComponentOptions): ClassDecorator {
+  return ((target: object): void => {
+    (target as Record<symbol, unknown>)[NEXUS_COMPONENT_META] = options;
   }) as ClassDecorator;
 }

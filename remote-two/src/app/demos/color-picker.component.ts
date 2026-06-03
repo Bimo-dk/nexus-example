@@ -1,7 +1,23 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'ColorPicker' })
+@NexusComponent({
+    "title": "Color Picker",
+    "description": "HSL color picker with hex preview",
+    "category": "input",
+    "tags": [
+      "color",
+      "picker"
+    ],
+    "icon": "palette",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Color picker"
+      }
+    }
+  })
 @Component({
   selector: 'demo-color-picker',
   standalone: true,

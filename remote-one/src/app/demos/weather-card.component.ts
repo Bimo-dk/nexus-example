@@ -1,7 +1,47 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'WeatherCard' })
+@NexusComponent({
+    "title": "Weather Card",
+    "description": "Gradient weather widget with metrics",
+    "category": "data-display",
+    "tags": [
+      "weather",
+      "card"
+    ],
+    "icon": "cloud",
+    "inputs": {
+      "city": {
+        "type": "string",
+        "default": "Copenhagen"
+      },
+      "condition": {
+        "type": "string",
+        "default": "Partly cloudy"
+      },
+      "icon": {
+        "type": "string",
+        "default": "partly cloudy emoji"
+      },
+      "temp": {
+        "type": "number",
+        "default": 18
+      },
+      "feels": {
+        "type": "number",
+        "default": 17
+      },
+      "wind": {
+        "type": "number",
+        "default": 12
+      },
+      "humidity": {
+        "type": "number",
+        "default": 64
+      }
+    }
+  })
 @Component({
   selector: 'demo-weather-card',
   standalone: true,

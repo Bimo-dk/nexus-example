@@ -1,7 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'MiniLineChart' })
+@NexusComponent({
+    "title": "Mini Line Chart",
+    "description": "Sparkline with gradient fill",
+    "category": "chart",
+    "tags": [
+      "chart",
+      "sparkline",
+      "svg"
+    ],
+    "icon": "show_chart",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Requests / min"
+      },
+      "data": {
+        "type": "array",
+        "description": "Array of numeric data points"
+      }
+    }
+  })
 @Component({
   selector: 'demo-mini-line-chart',
   standalone: true,

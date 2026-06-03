@@ -1,7 +1,27 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 @NexusRemote({ exposeAs: 'MultiSelect' })
+@NexusComponent({
+    "title": "Multi Select",
+    "description": "Filterable checkbox list",
+    "category": "input",
+    "tags": [
+      "select",
+      "checkbox"
+    ],
+    "icon": "checklist",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Pick technologies"
+      },
+      "options": {
+        "type": "array",
+        "description": "Array of option strings"
+      }
+    }
+  })
 @Component({
   selector: 'demo-multi-select',
   standalone: true,

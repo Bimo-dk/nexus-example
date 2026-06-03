@@ -1,9 +1,29 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Bar { label: string; value: number; color: string; }
 
 @NexusRemote({ exposeAs: 'ProgressMulti' })
+@NexusComponent({
+    "title": "Multi Progress",
+    "description": "Multiple labelled progress bars",
+    "category": "data-display",
+    "tags": [
+      "progress",
+      "bar"
+    ],
+    "icon": "leaderboard",
+    "inputs": {
+      "title": {
+        "type": "string",
+        "default": "System resources"
+      },
+      "bars": {
+        "type": "array",
+        "description": "Array of { label, value, color }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-progress-multi',
   standalone: true,

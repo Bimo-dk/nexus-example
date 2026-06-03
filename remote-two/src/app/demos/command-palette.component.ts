@@ -1,9 +1,30 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { NexusRemote } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '../nexus-remote.local';
 
 interface Command { id: string; label: string; shortcut?: string; icon: string; }
 
 @NexusRemote({ exposeAs: 'CommandPalette' })
+@NexusComponent({
+    "title": "Command Palette",
+    "description": "Fuzzy-search command launcher",
+    "category": "navigation",
+    "tags": [
+      "command",
+      "palette",
+      "search"
+    ],
+    "icon": "keyboard_command_key",
+    "inputs": {
+      "label": {
+        "type": "string",
+        "default": "Command palette"
+      },
+      "commands": {
+        "type": "array",
+        "description": "Array of { id, label, icon, shortcut? }"
+      }
+    }
+  })
 @Component({
   selector: 'demo-command-palette',
   standalone: true,

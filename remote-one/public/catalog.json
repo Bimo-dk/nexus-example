@@ -1,0 +1,295 @@
+{
+  "remote": "remoteOne",
+  "generatedAt": "2026-06-03T19:34:33.337Z",
+  "entries": [
+    {
+      "remote": "remoteOne",
+      "expose": "ActivityFeed",
+      "className": "ActivityFeedComponent",
+      "title": "Activity Feed",
+      "description": "Vertical list of recent events with icons",
+      "category": "data-display",
+      "tags": [
+        "feed",
+        "activity",
+        "list"
+      ],
+      "icon": "list_alt",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "Recent activity"
+        },
+        "items": {
+          "type": "array",
+          "description": "Array of { icon, text, time, tone? }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "CalendarHeatmap",
+      "className": "CalendarHeatmapComponent",
+      "title": "Calendar Heatmap",
+      "description": "Github-style contribution grid",
+      "category": "chart",
+      "tags": [
+        "heatmap",
+        "calendar"
+      ],
+      "icon": "grid_view",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "Last 70 days"
+        },
+        "seed": {
+          "type": "number",
+          "default": 7,
+          "description": "Seed for deterministic demo data"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "DonutChart",
+      "className": "DonutChartComponent",
+      "title": "Donut Chart",
+      "description": "SVG donut with segment legend",
+      "category": "chart",
+      "tags": [
+        "chart",
+        "donut",
+        "svg"
+      ],
+      "icon": "donut_large",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "Traffic source"
+        },
+        "segments": {
+          "type": "array",
+          "description": "Array of { label, value, color }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "EventTimeline",
+      "className": "EventTimelineComponent",
+      "title": "Event Timeline",
+      "description": "Vertical timeline of events with status dots",
+      "category": "data-display",
+      "tags": [
+        "timeline",
+        "events"
+      ],
+      "icon": "timeline",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "Deployment timeline"
+        },
+        "events": {
+          "type": "array",
+          "description": "Array of { time, title, description, tone? }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "GaugeChart",
+      "className": "GaugeChartComponent",
+      "title": "Gauge Chart",
+      "description": "Semi-circular gauge with needle",
+      "category": "chart",
+      "tags": [
+        "gauge",
+        "svg"
+      ],
+      "icon": "speed",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Latency"
+        },
+        "value": {
+          "type": "number",
+          "default": 142,
+          "required": true
+        },
+        "min": {
+          "type": "number",
+          "default": 0
+        },
+        "max": {
+          "type": "number",
+          "default": 500
+        },
+        "unit": {
+          "type": "string",
+          "default": "ms"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "MetricCard",
+      "className": "MetricCardComponent",
+      "title": "Metric Card",
+      "description": "Gradient KPI card with trend arrow",
+      "category": "data-display",
+      "tags": [
+        "kpi",
+        "metric"
+      ],
+      "icon": "insights",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Active users",
+          "description": "Card label"
+        },
+        "value": {
+          "type": "string",
+          "default": "12,438",
+          "description": "Big number value"
+        },
+        "trend": {
+          "type": "number",
+          "default": 8.2,
+          "description": "Trend direction (>0 up, <0 down)"
+        },
+        "trendPct": {
+          "type": "number",
+          "default": 8.2,
+          "description": "Trend percentage shown"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "MiniLineChart",
+      "className": "MiniLineChartComponent",
+      "title": "Mini Line Chart",
+      "description": "Sparkline with gradient fill",
+      "category": "chart",
+      "tags": [
+        "chart",
+        "sparkline",
+        "svg"
+      ],
+      "icon": "show_chart",
+      "inputs": {
+        "label": {
+          "type": "string",
+          "default": "Requests / min"
+        },
+        "data": {
+          "type": "array",
+          "description": "Array of numeric data points"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "ProgressMulti",
+      "className": "ProgressMultiComponent",
+      "title": "Multi Progress",
+      "description": "Multiple labelled progress bars",
+      "category": "data-display",
+      "tags": [
+        "progress",
+        "bar"
+      ],
+      "icon": "leaderboard",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "System resources"
+        },
+        "bars": {
+          "type": "array",
+          "description": "Array of { label, value, color }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "StatPills",
+      "className": "StatPillsComponent",
+      "title": "Stat Pills",
+      "description": "Row of color-coded stat pills",
+      "category": "data-display",
+      "tags": [
+        "stats",
+        "pill"
+      ],
+      "icon": "circle",
+      "inputs": {
+        "title": {
+          "type": "string",
+          "default": "Cluster snapshot"
+        },
+        "pills": {
+          "type": "array",
+          "description": "Array of { label, value, tone }"
+        }
+      },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "WeatherCard",
+      "className": "WeatherCardComponent",
+      "title": "Weather Card",
+      "description": "Gradient weather widget with metrics",
+      "category": "data-display",
+      "tags": [
+        "weather",
+        "card"
+      ],
+      "icon": "cloud",
+      "inputs": {
+        "city": {
+          "type": "string",
+          "default": "Copenhagen"
+        },
+        "condition": {
+          "type": "string",
+          "default": "Partly cloudy"
+        },
+        "icon": {
+          "type": "string",
+          "default": "partly cloudy emoji"
+        },
+        "temp": {
+          "type": "number",
+          "default": 18
+        },
+        "feels": {
+          "type": "number",
+          "default": 17
+        },
+        "wind": {
+          "type": "number",
+          "default": 12
+        },
+        "humidity": {
+          "type": "number",
+          "default": 64
+        }
+      },
+      "experimental": false
+    }
+  ]
+}
