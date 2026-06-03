@@ -43,6 +43,10 @@ services:
     container_name: nexus-example-portal
     ports:
       - "8669:80"
+    environment:
+      # Runtime config — substitueres ind i /assets/config.json ved container-start
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token-change-in-production}
+      REGISTRY_URL: /api
     depends_on:
       registry:
         condition: service_healthy
