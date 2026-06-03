@@ -1,0 +1,117 @@
+name: nexus-example
+
+# ============================================================================
+# Bimo-Nexus example — developer playground
+#
+# Pre-byggede images pulles fra ghcr.io (nexus-registry, nexus-portal, nexus-gateway).
+# Host + 2 remotes bygges LOKALT fra ./host, ./remote-one, ./remote-two — så du
+# kan editere dem og se ændringer ved `docker compose up --build <service>`.
+#
+# Krævet i .env:
+#   NEXUS_TOKEN       valgfri token-værdi (alle services skal være enige)
+#   NODE_AUTH_TOKEN   PAT med read:packages — kun til lokal host-build (henter
+#                     @bimo-dk/nexus-core fra GitHub Packages)
+# ============================================================================
+
+services:
+  # ===== PRE-BUILT (pulles fra ghcr.io) =====
+
+  registry:
+    image: ghcr.io/bimo-dk/nexus-registry:latest
+    container_name: nexus-example-registry
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      ALLOWED_ORIGINS: '*'
+    volumes:
+      - registry-data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  portal:
+    image: ghcr.io/bimo-dk/nexus-portal:latest
+    container_name: nexus-example-portal
+    ports:
+      - "8669:80"
+    depends_on:
+      registry:
+        condition: service_healthy
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  gateway:
+    image: ghcr.io/bimo-dk/nexus-gateway:latest
+    container_name: nexus-example-gateway
+    ports:
+      - "8668:80"
+    environment:
+      # Runtime config — gateway substituerer disse ind i /assets/config.json
+      HOST_REMOTE_ENTRY: /host/remoteEntry.json
+      HOST_EXPOSED_MODULE: ./AppShell
+    depends_on:
+      registry:
+        condition: service_healthy
+      host:
+        condition: service_started
+      remote-one:
+        condition: service_started
+      remote-two:
+        condition: service_started
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  # ===== LOKALT BYGGEDE (editérbare for udvikleren) =====
+
+  host:
+    build:
+      context: ./host
+      args:
+        NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    container_name: nexus-example-host
+    expose:
+      - "80"
+    depends_on:
+      registry:
+        condition: service_healthy
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  remote-one:
+    build: ./remote-one
+    container_name: nexus-example-remote-one
+    expose:
+      - "80"
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  remote-two:
+    build: ./remote-two
+    container_name: nexus-example-remote-two
+    expose:
+      - "80"
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+volumes:
+  registry-data:
+    driver: local
+
+networks:
+  nexus-net:
+    driver: bridge
