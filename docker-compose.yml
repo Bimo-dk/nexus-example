@@ -3,18 +3,18 @@ name: nexus-example
 # ============================================================================
 # Bimo-Nexus example — developer playground
 #
-# Pre-byggede images pulles fra ghcr.io (nexus-registry, nexus-portal, nexus-gateway).
-# Host + 2 remotes bygges LOKALT fra ./host, ./remote-one, ./remote-two — så du
-# kan editere dem og se ændringer ved `docker compose up --build <service>`.
+# Pre-built images are pulled from ghcr.io (nexus-registry, nexus-portal, nexus-gateway).
+# Host + 2 remotes are built LOCALLY from ./host, ./remote-one, ./remote-two — so you
+# can edit them and see changes via `docker compose up --build <service>`.
 #
-# Krævet i .env:
-#   NEXUS_TOKEN       valgfri token-værdi (alle services skal være enige)
-#   NODE_AUTH_TOKEN   PAT med read:packages — kun til lokal host-build (henter
-#                     @bimo-dk/nexus-core fra GitHub Packages)
+# Required in .env:
+#   NEXUS_TOKEN       optional token value (all services must agree)
+#   NODE_AUTH_TOKEN   PAT with read:packages — only for the local host build (fetches
+#                     @bimo-dk/nexus-core from GitHub Packages)
 # ============================================================================
 
 services:
-  # ===== PRE-BUILT (pulles fra ghcr.io) =====
+  # ===== PRE-BUILT (pulled from ghcr.io) =====
 
   registry:
     image: ghcr.io/bimo-dk/nexus-registry:latest
@@ -28,7 +28,7 @@ services:
       PORT: 3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       ALLOWED_ORIGINS: '*'
-      # Format: name=url,name=url. Registry pinger disse hvert HEALTH_CHECK_INTERVAL_MS
+      # Format: name=url,name=url. Registry pings these every HEALTH_CHECK_INTERVAL_MS
       SYSTEM_SERVICES: gateway=http://gateway/health,host=http://host/health,portal=http://portal/health
       HEALTH_CHECK_INTERVAL_MS: '30000'
     volumes:
@@ -49,7 +49,7 @@ services:
     ports:
       - "8669:80"
     environment:
-      # Runtime config — substitueres ind i /assets/config.json ved container-start
+      # Runtime config — substituted into /assets/config.json at container start
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token-change-in-production}
       REGISTRY_URL: /api
     depends_on:
@@ -65,7 +65,7 @@ services:
     ports:
       - "8668:80"
     environment:
-      # Runtime config — gateway substituerer disse ind i /assets/config.json
+      # Runtime config — gateway substitutes these into /assets/config.json
       HOST_REMOTE_ENTRY: /host/remoteEntry.json
       HOST_EXPOSED_MODULE: ./AppShell
     depends_on:
@@ -81,7 +81,7 @@ services:
       - nexus-net
     restart: unless-stopped
 
-  # ===== LOKALT BYGGEDE (editérbare for udvikleren) =====
+  # ===== BUILT LOCALLY (editable by the developer) =====
 
   host:
     build:
@@ -126,8 +126,8 @@ networks:
   nexus-net:
     driver: bridge
 
-# BuildKit secrets — token læses fra .env's NODE_AUTH_TOKEN, mountes ind i build
-# men gemmes ALDRIG i image-layer eller build-log.
+# BuildKit secrets — token is read from .env's NODE_AUTH_TOKEN, mounted into the build
+# but NEVER stored in image layers or build logs.
 secrets:
   node_auth_token:
     environment: NODE_AUTH_TOKEN

@@ -8,13 +8,13 @@ import { environment } from '../../environments/environment';
   template: `
     <section class="remote-card">
       <header>
-        <h2>Remote Two — uafhængig micro frontend tester noget her</h2>
+        <h2>Remote Two — independent micro frontend</h2>
         <span class="badge">Nexus entry</span>
       </header>
 
       <p class="lead">
-        Denne komponent demonstrerer at remote-two er fuldstændig isoleret fra remote-one —
-        deres state, byggetider og versioner er uafhængige. tester om denne virker 
+        This component demonstrates that remote-two is fully isolated from remote-one —
+        their state, build times and versions are independent.
       </p>
 
       <dl class="meta">
@@ -25,14 +25,14 @@ import { environment } from '../../environments/environment';
       </dl>
 
       <div class="counter">
-        <p>Lokal state-counter:</p>
+        <p>Local state counter:</p>
         <button type="button" (click)="increment()">+1</button>
         <button type="button" (click)="decrement()">-1</button>
         <strong>{{ count() }}</strong>
       </div>
 
       <footer>
-        <small>Eksponeret som <code>./RemoteEntry</code> via Nexus.</small>
+        <small>Exposed as <code>./RemoteEntry</code> via Nexus.</small>
       </footer>
     </section>
   `,

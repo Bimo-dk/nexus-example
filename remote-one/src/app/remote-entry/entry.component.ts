@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   template: `
     <section class="remote-card">
       <header>
-        <h2>Remote One — dette er en micro frontend</h2>
+        <h2>Remote One — this is a micro frontend</h2>
         <span class="badge">Nexus entry</span>
       </header>
 
@@ -20,13 +20,13 @@ import { environment } from '../../environments/environment';
       </dl>
 
       <div class="counter">
-        <p>Isoleret state-counter (signal):</p>
-        <button type="button" (click)="increment()">Klik mig</button>
+        <p>Isolated state counter (signal):</p>
+        <button type="button" (click)="increment()">Click me</button>
         <strong>{{ count() }}</strong>
       </div>
 
       <footer>
-        <small>Denne komponent leveres via Nexus som <code>./RemoteEntry</code>.</small>
+        <small>This component is delivered via Nexus as <code>./RemoteEntry</code>.</small>
       </footer>
     </section>
   `,

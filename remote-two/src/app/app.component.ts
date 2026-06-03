@@ -11,7 +11,7 @@ import { EntryComponent } from './remote-entry/entry.component';
     <main class="standalone-shell">
       <header>
         <h1>Remote Two — standalone mode</h1>
-        <p>Denne side er kun synlig når remote-two køres isoleret.</p>
+        <p>This page is only visible when remote-two runs in isolation.</p>
       </header>
       <app-remote-entry></app-remote-entry>
     </main>

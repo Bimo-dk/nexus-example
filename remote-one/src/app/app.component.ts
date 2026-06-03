@@ -11,7 +11,7 @@ import { EntryComponent } from './remote-entry/entry.component';
     <main class="standalone-shell">
       <header>
         <h1>Remote One — standalone mode</h1>
-        <p>Denne side er kun synlig når remote-one køres isoleret (ikke føderet ind i host).</p>
+        <p>This page is only visible when remote-one runs in isolation (not federated into the host).</p>
       </header>
       <app-remote-entry></app-remote-entry>
     </main>

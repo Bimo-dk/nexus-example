@@ -1,126 +1,126 @@
 # nexus-example
 
-Developer playground for **Bimo-Nexus** micro frontend platform. Demonstrerer en komplet kørende stack hvor du kan eksperimentere med host og remotes uden at sætte hele systemet op manuelt.
+Developer playground for the **Bimo-Nexus** micro frontend platform. Demonstrates a complete running stack where you can experiment with host and remotes without setting up the whole system manually.
 
-## Hvad du får
+## What you get
 
-Når du kører `docker compose up`:
+When you run `docker compose up`:
 
-| Service | Type | Port | Beskrivelse |
+| Service | Type | Port | Description |
 |---|---|---|---|
-| `gateway` | **pre-built** image | **8668** | Browser går hertil — public entry-point |
-| `portal` | **pre-built** image | **8669** | Admin UI til at tilføje/fjerne remotes |
-| `registry` | **pre-built** image | (intern) | Source of truth for remote-konfiguration |
-| `host` | **lokalt bygget** fra `./host/` | (intern) | Layout shell — federerer remotes |
-| `remote-one` | **lokalt bygget** fra `./remote-one/` | (intern) | Eksempel micro frontend |
-| `remote-two` | **lokalt bygget** fra `./remote-two/` | (intern) | Endnu en eksempel-MFE |
+| `gateway` | **pre-built** image | **8668** | Browser goes here — public entry point |
+| `portal` | **pre-built** image | **8669** | Admin UI for adding/removing remotes |
+| `registry` | **pre-built** image | (internal) | Source of truth for remote configuration |
+| `host` | **built locally** from `./host/` | (internal) | Layout shell — federates remotes |
+| `remote-one` | **built locally** from `./remote-one/` | (internal) | Example micro frontend |
+| `remote-two` | **built locally** from `./remote-two/` | (internal) | Another example MFE |
 
-Pre-built images pulles fra `ghcr.io/bimo-dk/*`. Lokale services bygger fra editérbar kildekode.
+Pre-built images are pulled from `ghcr.io/bimo-dk/*`. Local services are built from editable source code.
 
 ## Quick start
 
 ```bash
-# 1. Klon
+# 1. Clone
 git clone https://github.com/Bimo-dk/nexus-example.git
 cd nexus-example
 
-# 2. Konfigurer .env
+# 2. Configure .env
 cp .env.example .env
-# Rediger .env — sæt NODE_AUTH_TOKEN til en PAT med read:packages scope
-# (kræves for host-build kan hente @bimo-dk/nexus-core)
+# Edit .env — set NODE_AUTH_TOKEN to a PAT with read:packages scope
+# (required so the host build can fetch @bimo-dk/nexus-core)
 
-# 3. Login til ghcr.io for at pulle pre-built images
-echo $NODE_AUTH_TOKEN | docker login ghcr.io -u <din-github-user> --password-stdin
+# 3. Log in to ghcr.io to pull pre-built images
+echo $NODE_AUTH_TOKEN | docker login ghcr.io -u <your-github-user> --password-stdin
 
-# 4. Start alt
+# 4. Start everything
 docker compose up --build
 
-# 5. Åbn i browser
-# http://localhost:8668   ← applikationen (gateway → host → remotes)
-# http://localhost:8669   ← admin portal
+# 5. Open in browser
+# http://localhost:8668   -> the application (gateway -> host -> remotes)
+# http://localhost:8669   -> admin portal
 ```
 
 ## Developer workflow
 
-### Edit remote-one og se ændringer
+### Edit remote-one and see changes
 
 ```bash
-# Ret kode i ./remote-one/src/app/remote-entry/entry.component.ts
+# Edit code in ./remote-one/src/app/remote-entry/entry.component.ts
 docker compose up -d --build remote-one
-# Hard-refresh browser → ændringer er live
+# Hard-refresh browser -> changes are live
 ```
 
 ### Edit host
 
 ```bash
-# Ret kode i ./host/src/app/...
+# Edit code in ./host/src/app/...
 docker compose up -d --build host
 ```
 
-### Tilføj en ny remote (kun via UI)
+### Add a new remote (UI only)
 
-1. Åbn http://localhost:8669
-2. Remotes → Add remote
-3. Udfyld navn + URL → Save
-4. Host opdager den via WebSocket og registrerer ruten øjeblikkelig
+1. Open http://localhost:8669
+2. Remotes -> Add remote
+3. Fill in name + URL -> Save
+4. Host discovers it via WebSocket and registers the route immediately
 
-### Tilføj en ny remote (med kode)
+### Add a new remote (with code)
 
-1. Bygges normalt fra `bnx generate remote` (kommer fra `@bimo-dk/nexus-cli`)
-2. Tilføj som service i denne `docker-compose.yml`:
+1. Normally built from `bnx generate remote` (from `@bimo-dk/nexus-cli`)
+2. Add as a service in this `docker-compose.yml`:
    ```yaml
    remote-three:
      build: ./remote-three
      expose: ["80"]
      networks: [nexus-net]
    ```
-3. Tilføj nginx proxy-route i gateway (kræver pre-built gateway-image opdateres separat)
+3. Add an nginx proxy route in the gateway (requires the pre-built gateway image to be updated separately)
 4. `docker compose up --build remote-three`
-5. Registrer hos registry via Portal UI
+5. Register with the registry via the Portal UI
 
-## Mappestruktur
+## Folder structure
 
 ```
 nexus-example/
-├── docker-compose.yml          ← orchestrator
-├── .env.example                ← konfiguration-template
-├── README.md                   ← (du er her)
-├── host/                       ← LOKAL host-template kode — edit her
-├── remote-one/                 ← LOKAL remote — edit her
-└── remote-two/                 ← LOKAL remote — edit her
+├── docker-compose.yml          -> orchestrator
+├── .env.example                -> configuration template
+├── README.md                   -> (you are here)
+├── host/                       -> LOCAL host-template source — edit here
+├── remote-one/                 -> LOCAL remote — edit here
+└── remote-two/                 -> LOCAL remote — edit here
 ```
 
-## Hvordan gateway router
+## How the gateway routes
 
-Gateway-imagen har built-in nginx proxy:
+The gateway image has a built-in nginx proxy:
 
-| URL-prefix | Internt destination |
+| URL prefix | Internal destination |
 |---|---|
 | `/host/*` | `host:80/*` |
 | `/remotes/remoteOne/*` | `remote-one:80/*` |
 | `/remotes/remoteTwo/*` | `remote-two:80/*` |
 | `/api/*` | `registry:3000/api/*` |
 | `/ws` | `registry:3000/ws` (WebSocket broadcast) |
-| Alt andet | gateway's egen SPA index.html |
+| Everything else | gateway's own SPA index.html |
 
-Derfor SKAL service-navnene i denne `docker-compose.yml` matche præcis: `host`, `remote-one`, `remote-two`, `registry`. Skift dem ikke.
+For this reason the service names in this `docker-compose.yml` MUST match exactly: `host`, `remote-one`, `remote-two`, `registry`. Do not change them.
 
-## Hvis du vil tilføje en remote-three
+## If you want to add a remote-three
 
-Gateway image'en har KUN proxies for `remoteOne` og `remoteTwo` indbygget. For at tilføje `remoteThree`:
+The gateway image has ONLY proxies for `remoteOne` and `remoteTwo` built in. To add `remoteThree`:
 
-1. Fork `nexus-gateway` repo
-2. Tilføj proxy-block i `nginx.conf` for `/remotes/remoteThree/`
-3. Build + push dit eget image: `ghcr.io/<dig>/nexus-gateway:latest`
-4. Skift `image:` i denne `docker-compose.yml` til dit fork
+1. Fork the `nexus-gateway` repo
+2. Add a proxy block in `nginx.conf` for `/remotes/remoteThree/`
+3. Build + push your own image: `ghcr.io/<you>/nexus-gateway:latest`
+4. Change `image:` in this `docker-compose.yml` to your fork
 
-Eller alternativt: send PR til [nexus-gateway](https://github.com/Bimo-dk/nexus-gateway) der gør antallet af remotes konfigurerbart.
+Alternatively: send a PR to [nexus-gateway](https://github.com/Bimo-dk/nexus-gateway) that makes the number of remotes configurable.
 
 ## Troubleshooting
 
-| Problem | Løsning |
+| Problem | Solution |
 |---|---|
-| `denied: requested access to the resource is denied` ved pull | Login til ghcr.io først: `docker login ghcr.io` |
-| Host-build fejler med `401 Unauthorized` | Sæt `NODE_AUTH_TOKEN` i `.env` til en PAT med `read:packages` |
-| Browser viser "Host shell utilgængelig" | Host-container er nede — `docker compose logs host` |
-| Portal viser ingen remotes | Registry-volumet er tomt — `docker compose down -v && docker compose up` |
+| `denied: requested access to the resource is denied` on pull | Log in to ghcr.io first: `docker login ghcr.io` |
+| Host build fails with `401 Unauthorized` | Set `NODE_AUTH_TOKEN` in `.env` to a PAT with `read:packages` |
+| Browser shows "Host shell unavailable" | Host container is down — `docker compose logs host` |
+| Portal shows no remotes | Registry volume is empty — `docker compose down -v && docker compose up` |
