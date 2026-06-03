@@ -36,19 +36,23 @@ export class LocalNexusService {
   // Compatibility alias so existing demo components keep working
   readonly remotes = computed(() => this.loadedRemotes());
 
-  async initialize(registryUrl: string): Promise<void> {
+  async initialize(registryUrl: string, nexusToken: string): Promise<void> {
+    let remotes: RemoteRecord[] = [];
     try {
+      const headers = nexusToken ? { 'X-Nexus-Token': nexusToken } : {};
       const res = await firstValueFrom(
-        this.http.get<{ remotes: RemoteRecord[] }>(`${registryUrl.replace(/\/$/, '')}/remotes`),
+        this.http.get<{ remotes: RemoteRecord[] }>(`${registryUrl.replace(/\/$/, '')}/remotes`, { headers }),
       );
-      const enabled = res.remotes.filter((r) => r.enabled);
+      remotes = res.remotes.filter((r) => r.enabled);
       this.registryOnline.set(true);
-      this.loadedRemotes.set(enabled);
-      await this.registerRoutes(enabled);
+      console.log(`[local-nexus] Loaded ${remotes.length} remote(s) from registry`);
     } catch (err) {
       this.registryOnline.set(false);
-      console.error('[local-nexus] Registry fetch failed:', err instanceof HttpErrorResponse ? err.status : err);
+      const status = err instanceof HttpErrorResponse ? err.status : '?';
+      console.error(`[local-nexus] Registry fetch failed (status=${status}):`, err);
     }
+    this.loadedRemotes.set(remotes);
+    await this.registerRoutes(remotes);
   }
 
   private async registerRoutes(remotes: RemoteRecord[]): Promise<void> {

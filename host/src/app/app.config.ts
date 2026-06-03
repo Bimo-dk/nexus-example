@@ -4,9 +4,10 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { LocalNexusService } from './local-nexus.service';
 
-// Runtime config (registry URL etc.) — could be loaded from /assets/config.json,
-// hardcoded here for the demo
+// Demo config — in a real deployment these would come from /assets/config.json
+// generated at container start. Keeping them inline here keeps the demo simple.
 const REGISTRY_URL = '/api';
+const NEXUS_TOKEN = 'dev-token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideAppInitializer(async () => {
-      await inject(LocalNexusService).initialize(REGISTRY_URL);
+      await inject(LocalNexusService).initialize(REGISTRY_URL, NEXUS_TOKEN);
     }),
   ],
 };
