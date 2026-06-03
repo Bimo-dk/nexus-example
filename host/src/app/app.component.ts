@@ -27,6 +27,7 @@ import { HealthService } from './services/health.service';
         </div>
         <nav class="topnav">
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/demos" routerLinkActive="active">Demos</a>
         </nav>
         <div class="meta">
           <span class="pill" [class.online]="nexus.registryOnline()" [class.offline]="!nexus.registryOnline()">
