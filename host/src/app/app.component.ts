@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from '@angular/router';
-import { DynamicNexusService, RegistryService } from '@bimo-dk/nexus-runtime';
+import { LocalNexusService } from './local-nexus.service';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
 
@@ -15,9 +15,7 @@ import { DashboardComponent } from './components/dashboard.component';
       @if (!nexus.registryOnline()) {
         <div class="offline-banner">
           <span class="icon">⚠</span>
-          <strong>Registry offline</strong> — showing data from
-          <code>{{ registry.lastSource() }}</code>
-          (cache or static backup). New remotes cannot be registered until the connection is restored.
+          <strong>Registry offline</strong> — using last known data. New remotes cannot be registered until the connection is restored.
         </div>
       }
 
@@ -222,8 +220,7 @@ import { DashboardComponent } from './components/dashboard.component';
   ],
 })
 export class AppComponent implements OnInit {
-  readonly nexus = inject(DynamicNexusService);
-  readonly registry = inject(RegistryService);
+  readonly nexus = inject(LocalNexusService);
   private readonly health = inject(HealthService);
   private readonly router = inject(Router);
 

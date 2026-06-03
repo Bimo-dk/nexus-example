@@ -1,42 +1,25 @@
 import { Injectable, Type, inject } from '@angular/core';
-import { loadRemoteModule } from '@angular-architects/native-federation';
-import { DynamicNexusService } from '@bimo-dk/nexus-runtime';
+import { LocalNexusService } from '../local-nexus.service';
 
 /**
- * LOCAL copy of the helper for loading arbitrary exposed modules.
+ * Cached loader for arbitrary exposed modules on a registered remote.
+ * Thin wrapper over LocalNexusService.loadExposed with per-(remote,expose) caching.
  *
- * The intent is to consume this from `@bimo-dk/nexus-runtime`, but it ships
- * here until that package's next version is published (the runtime upstream
- * exports it as ComponentLoaderService in >=0.2.0). When the upstream version
- * is available, replace imports with:
- *
- *   import { ComponentLoaderService } from '@bimo-dk/nexus-runtime';
- *
- * and delete this file.
+ * Previously imported DynamicNexusService from @bimo-dk/nexus-runtime, but that
+ * package is bundled with tsup (no Angular partial compilation) which makes
+ * Angular's AOT pipeline fall back to JIT at runtime ("JIT compiler unavailable").
+ * LocalNexusService is inlined into the host so the host's ngc handles it.
  */
 @Injectable({ providedIn: 'root' })
 export class ComponentLoaderService {
-  private readonly nexus = inject(DynamicNexusService);
+  private readonly nexus = inject(LocalNexusService);
   private readonly cache = new Map<string, Promise<Type<unknown>>>();
 
   loadComponent(remoteName: string, exposeAs: string): Promise<Type<unknown>> {
     const key = `${remoteName}::${exposeAs}`;
     const existing = this.cache.get(key);
     if (existing) return existing;
-
-    const remote = this.nexus.loadedRemotes().find((r) => r.name === remoteName);
-    if (!remote) {
-      return Promise.reject(new Error(`[nexus] Remote "${remoteName}" not loaded (not in registry?)`));
-    }
-
-    const moduleName = exposeAs.startsWith('./') ? exposeAs : `./${exposeAs}`;
-    const promise = loadRemoteModule({ remoteEntry: remote.url, exposedModule: moduleName }).then(
-      (mod: Record<string, unknown>) => {
-        const cmp = (mod['default'] ?? mod[Object.keys(mod)[0]]) as Type<unknown>;
-        if (!cmp) throw new Error(`[nexus] Module "${moduleName}" on "${remoteName}" exposed nothing usable`);
-        return cmp;
-      },
-    );
+    const promise = this.nexus.loadExposed(remoteName, exposeAs);
     this.cache.set(key, promise);
     return promise;
   }
