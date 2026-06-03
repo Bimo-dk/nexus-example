@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Type, inject, signal } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { ComponentLoaderService } from '@bimo-dk/nexus-runtime';
+import { ComponentLoaderService } from './component-loader.local';
 import { PATTERN_SLICES, type DemoSpec } from './demo-catalog';
 
 interface Slot { spec: DemoSpec; state: 'idle' | 'loading' | 'loaded' | 'error'; component: Type<unknown> | null; error: string | null; }
