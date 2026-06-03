@@ -1,0 +1,35 @@
+{
+  "environments": {
+    "local-example": {
+      "publicUrl": "http://localhost:8668"
+    },
+    "staging": {
+      "publicUrl": "https://nexus-staging.bimo.dk",
+      "tokenEnv": "NEXUS_STAGING_TOKEN"
+    },
+    "prod": {
+      "publicUrl": "https://nexus.bimo.dk",
+      "tokenEnv": "NEXUS_PROD_TOKEN"
+    }
+  },
+  "dev": {
+    "baseEnv": "local-example",
+    "proxyPort": 9000,
+    "host": {
+      "mode": "proxy"
+    },
+    "remotes": {
+      "remoteOne": {
+        "port": 8666,
+        "path": "./remote-one",
+        "autostart": false
+      },
+      "remoteTwo": {
+        "port": 8671,
+        "path": "./remote-two",
+        "autostart": false
+      }
+    },
+    "logRouting": true
+  }
+}
