@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { NexusRemote } from '@bimo-dk/nexus-build';
 import { environment } from '../../environments/environment';
 
+@NexusRemote()
 @Component({
   selector: 'app-remote-entry',
   standalone: true,
