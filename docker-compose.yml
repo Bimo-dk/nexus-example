@@ -101,7 +101,10 @@ services:
     restart: unless-stopped
 
   remote-one:
-    build: ./remote-one
+    build:
+      context: ./remote-one
+      secrets:
+        - node_auth_token
     container_name: nexus-example-remote-one
     expose:
       - "80"
@@ -110,7 +113,10 @@ services:
     restart: unless-stopped
 
   remote-two:
-    build: ./remote-two
+    build:
+      context: ./remote-two
+      secrets:
+        - node_auth_token
     container_name: nexus-example-remote-two
     expose:
       - "80"

@@ -1,8 +1,20 @@
+# syntax=docker/dockerfile:1.7
+# ============================================================================
+# remote-one — Bimo-Nexus example remote
+#
+# Uses BuildKit secrets so NODE_AUTH_TOKEN is NEVER leaked in build logs.
+# Build via docker compose: secret passed automatically (see docker-compose.yml).
+# Build manually: docker build --secret id=node_auth_token,env=NODE_AUTH_TOKEN .
+# ============================================================================
+
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --no-audit --no-fund --legacy-peer-deps
+COPY package*.json .npmrc ./
+
+RUN --mount=type=secret,id=node_auth_token,required=true \
+    NODE_AUTH_TOKEN=$(cat /run/secrets/node_auth_token) \
+    npm install --no-audit --no-fund --legacy-peer-deps
 
 COPY tsconfig*.json angular.json federation.config.js ./
 COPY src ./src
