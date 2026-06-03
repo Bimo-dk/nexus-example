@@ -17,8 +17,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
-          cache-dependency-path: ${{ matrix.remote }}/package-lock.json
       - working-directory: ${{ matrix.remote }}
         run: npm install --no-audit --no-fund --legacy-peer-deps
       - working-directory: ${{ matrix.remote }}
