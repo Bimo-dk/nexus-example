@@ -19,6 +19,8 @@ services:
   registry:
     image: ghcr.io/bimo-dk/nexus-registry:latest
     container_name: nexus-example-registry
+    ports:
+      - "3000:3000"
     expose:
       - "3000"
     environment:
