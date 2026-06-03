@@ -17,3 +17,5 @@ Thumbs.db
 # package-lock not tracked at remote-one level (host is the lockfile source)
 remote-one/package-lock.json
 remote-two/package-lock.json
+# Local-only compose overrides (e.g. for testing pre-publish images)
+docker-compose.override.yml
