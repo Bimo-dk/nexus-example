@@ -1,0 +1,30 @@
+{
+  "remote": "cart",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "entries": [
+    {
+      "remote": "cart",
+      "expose": "CartPage",
+      "className": "CartPageComponent",
+      "title": "Cart page",
+      "description": "Indkøbskurv med vareoversigt og checkout-knap",
+      "category": "pages",
+      "tags": ["cart", "shop"],
+      "inputs": {},
+      "experimental": false
+    },
+    {
+      "remote": "cart",
+      "expose": "MiniCart",
+      "className": "MiniCartComponent",
+      "title": "Mini cart",
+      "description": "Kompakt kurv-ikon med badge til brug i navbar",
+      "category": "navigation",
+      "tags": ["cart", "navbar"],
+      "inputs": {
+        "itemCount": { "type": "number", "default": 0 }
+      },
+      "experimental": false
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "remote": "catalog",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "entries": [
+    {
+      "remote": "catalog",
+      "expose": "CatalogPage",
+      "className": "CatalogPageComponent",
+      "title": "Catalog page",
+      "description": "Produktliste med filterbar og kurv-knap",
+      "category": "pages",
+      "tags": ["products", "shop"],
+      "inputs": {},
+      "experimental": false
+    }
+  ]
+}

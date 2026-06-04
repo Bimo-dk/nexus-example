@@ -1,22 +1,46 @@
 {
   "_comment": "Static backup used by host if both registry API and localStorage cache are unavailable. Must be updated manually or via CI/CD when the set of known stable remotes changes.",
-  "snapshotAt": "2026-06-03T00:00:00.000Z",
+  "snapshotAt": "2026-06-04T00:00:00.000Z",
   "remotes": [
     {
-      "name": "remoteOne",
-      "url": "/remotes/remoteOne/remoteEntry.json",
-      "exposedModule": "./RemoteEntry",
-      "routePath": "remote-one",
+      "name": "catalog",
+      "url": "/remotes/catalog/remoteEntry.json",
+      "exposedModule": "./CatalogPage",
+      "routePath": "products",
       "enabled": true,
-      "addedAt": "2025-01-01T00:00:00.000Z"
+      "addedAt": "2026-06-04T00:00:00.000Z"
     },
     {
-      "name": "remoteTwo",
-      "url": "/remotes/remoteTwo/remoteEntry.json",
-      "exposedModule": "./RemoteEntry",
-      "routePath": "remote-two",
+      "name": "cart",
+      "url": "/remotes/cart/remoteEntry.json",
+      "exposedModule": "./CartPage",
+      "routePath": "cart",
       "enabled": true,
-      "addedAt": "2025-01-01T00:00:00.000Z"
+      "addedAt": "2026-06-04T00:00:00.000Z"
+    },
+    {
+      "name": "product",
+      "url": "/remotes/product/remoteEntry.json",
+      "exposedModule": "./ProductPage",
+      "routePath": "products/:id",
+      "enabled": true,
+      "addedAt": "2026-06-04T00:00:00.000Z"
+    },
+    {
+      "name": "checkout",
+      "url": "/remotes/checkout/remoteEntry.json",
+      "exposedModule": "./CheckoutPage",
+      "routePath": "checkout",
+      "enabled": true,
+      "addedAt": "2026-06-04T00:00:00.000Z"
+    },
+    {
+      "name": "account",
+      "url": "/remotes/account/remoteEntry.json",
+      "exposedModule": "./AccountPage",
+      "routePath": "account",
+      "enabled": true,
+      "addedAt": "2026-06-04T00:00:00.000Z"
     }
   ]
 }

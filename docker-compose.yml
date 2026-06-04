@@ -1,24 +1,24 @@
-name: nexus-example
+name: nexusshop
 
 # ============================================================================
-# Bimo-Nexus example — developer playground
+# NexusShop — Bimo-Nexus webshop demo
 #
 # Pre-built images are pulled from ghcr.io (nexus-registry, nexus-portal, nexus-gateway).
-# Host + 2 remotes are built LOCALLY from ./host, ./remote-one, ./remote-two — so you
-# can edit them and see changes via `docker compose up --build <service>`.
+# Host + 5 remotes are built LOCALLY — edit them and rebuild with:
+#   docker compose up --build <service>
 #
 # Required in .env:
-#   NEXUS_TOKEN       optional token value (all services must agree)
-#   NODE_AUTH_TOKEN   PAT with read:packages — only for the local host build (fetches
-#                     @bimo-dk/nexus-core from GitHub Packages)
+#   NEXUS_TOKEN       shared secret (all services must agree)
+#   NODE_AUTH_TOKEN   PAT with read:packages — needed to install @bimo-dk/* packages
 # ============================================================================
 
 services:
-  # ===== PRE-BUILT (pulled from ghcr.io) =====
+
+  # ── Infrastructure ─────────────────────────────────────────────────────────
 
   registry:
     image: ghcr.io/bimo-dk/nexus-registry:latest
-    container_name: nexus-example-registry
+    container_name: nexusshop-registry
     ports:
       - "3000:3000"
     expose:
@@ -27,64 +27,52 @@ services:
       NODE_ENV: production
       PORT: 3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
-      ALLOWED_ORIGINS: '*'
-      # Format: name=url,name=url. Registry pings these every HEALTH_CHECK_INTERVAL_MS
+      ALLOWED_ORIGINS: http://localhost:8668,http://localhost:8669
       SYSTEM_SERVICES: gateway=http://gateway/health,host=http://host/health,portal=http://portal/health
       HEALTH_CHECK_INTERVAL_MS: '30000'
     volumes:
       - registry-data:/app/data
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
       start_period: 10s
     networks:
       - nexus-net
     restart: unless-stopped
 
-  portal:
-    image: ghcr.io/bimo-dk/nexus-portal:latest
-    container_name: nexus-example-portal
-    ports:
-      - "8669:80"
-    environment:
-      # Runtime config — substituted into /assets/config.json at container start
-      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token-change-in-production}
-      REGISTRY_URL: /api
-    depends_on:
-      registry:
-        condition: service_healthy
-    networks:
-      - nexus-net
-    restart: unless-stopped
-
   gateway:
     image: ghcr.io/bimo-dk/nexus-gateway:latest
-    container_name: nexus-example-gateway
+    container_name: nexusshop-gateway
     ports:
       - "8668:80"
     environment:
-      # Runtime config — gateway substitutes these into /assets/config.json
       HOST_REMOTE_ENTRY: /host/remoteEntry.json
       HOST_EXPOSED_MODULE: ./AppShell
-      # Dynamic remote routing — gateway fetches registered remotes from registry
       REGISTRY_INTERNAL_URL: http://registry:3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     depends_on:
-      registry:
-        condition: service_healthy
-      host:
-        condition: service_started
-      remote-one:
-        condition: service_started
-      remote-two:
-        condition: service_started
+      registry: { condition: service_healthy }
     networks:
       - nexus-net
     restart: unless-stopped
 
-  # ===== BUILT LOCALLY (editable by the developer) =====
+  portal:
+    image: ghcr.io/bimo-dk/nexus-portal:latest
+    container_name: nexusshop-portal
+    ports:
+      - "8669:80"
+    environment:
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      REGISTRY_URL: /api
+    depends_on:
+      registry: { condition: service_healthy }
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  # ── Host ───────────────────────────────────────────────────────────────────
 
   host:
     build:
@@ -93,52 +81,111 @@ services:
         NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       secrets:
         - node_auth_token
-    container_name: nexus-example-host
+    container_name: nexusshop-host
     expose:
       - "80"
+    environment:
+      REGISTRY_INTERNAL_URL: http://registry:3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     depends_on:
-      registry:
-        condition: service_healthy
+      registry: { condition: service_healthy }
     networks:
       - nexus-net
     restart: unless-stopped
 
-  remote-one:
+  # ── Remotes ────────────────────────────────────────────────────────────────
+
+  remote-catalog:
     build:
-      context: ./remote-one
+      context: ./remote-catalog
       secrets:
         - node_auth_token
-    container_name: nexus-example-remote-one
+    container_name: nexusshop-catalog
     expose:
       - "80"
     environment:
-      REGISTRY_URL: /api
+      REGISTRY_INTERNAL_URL: http://registry:3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
-      PUBLIC_URL: http://localhost:8668/remotes/remoteOne/remoteEntry.json
-      UPSTREAM_URL: http://remote-one:80
+      PUBLIC_URL: /remotes/catalog/remoteEntry.json
+      UPSTREAM_URL: http://remote-catalog:80
     depends_on:
-      registry:
-        condition: service_healthy
+      registry: { condition: service_healthy }
     networks:
       - nexus-net
     restart: unless-stopped
 
-  remote-two:
+  remote-cart:
     build:
-      context: ./remote-two
+      context: ./remote-cart
       secrets:
         - node_auth_token
-    container_name: nexus-example-remote-two
+    container_name: nexusshop-cart
     expose:
       - "80"
     environment:
-      REGISTRY_URL: /api
+      REGISTRY_INTERNAL_URL: http://registry:3000
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
-      PUBLIC_URL: http://localhost:8668/remotes/remoteTwo/remoteEntry.json
-      UPSTREAM_URL: http://remote-two:80
+      PUBLIC_URL: /remotes/cart/remoteEntry.json
+      UPSTREAM_URL: http://remote-cart:80
     depends_on:
-      registry:
-        condition: service_healthy
+      registry: { condition: service_healthy }
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  remote-product:
+    build:
+      context: ./remote-product
+      secrets:
+        - node_auth_token
+    container_name: nexusshop-product
+    expose:
+      - "80"
+    environment:
+      REGISTRY_INTERNAL_URL: http://registry:3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      PUBLIC_URL: /remotes/product/remoteEntry.json
+      UPSTREAM_URL: http://remote-product:80
+    depends_on:
+      registry: { condition: service_healthy }
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  remote-checkout:
+    build:
+      context: ./remote-checkout
+      secrets:
+        - node_auth_token
+    container_name: nexusshop-checkout
+    expose:
+      - "80"
+    environment:
+      REGISTRY_INTERNAL_URL: http://registry:3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      PUBLIC_URL: /remotes/checkout/remoteEntry.json
+      UPSTREAM_URL: http://remote-checkout:80
+    depends_on:
+      registry: { condition: service_healthy }
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  remote-account:
+    build:
+      context: ./remote-account
+      secrets:
+        - node_auth_token
+    container_name: nexusshop-account
+    expose:
+      - "80"
+    environment:
+      REGISTRY_INTERNAL_URL: http://registry:3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      PUBLIC_URL: /remotes/account/remoteEntry.json
+      UPSTREAM_URL: http://remote-account:80
+    depends_on:
+      registry: { condition: service_healthy }
     networks:
       - nexus-net
     restart: unless-stopped
@@ -151,8 +198,8 @@ networks:
   nexus-net:
     driver: bridge
 
-# BuildKit secrets — token is read from .env's NODE_AUTH_TOKEN, mounted into the build
-# but NEVER stored in image layers or build logs.
+# BuildKit secrets — token is read from .env's NODE_AUTH_TOKEN, mounted into
+# the build but NEVER stored in image layers or build logs.
 secrets:
   node_auth_token:
     environment: NODE_AUTH_TOKEN
