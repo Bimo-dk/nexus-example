@@ -1,0 +1,17 @@
+{
+  "remote": "checkout",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "entries": [
+    {
+      "remote": "checkout",
+      "expose": "CheckoutPage",
+      "className": "CheckoutPageComponent",
+      "title": "Checkout page",
+      "description": "Betalingsflow med adresse- og kortformular",
+      "category": "pages",
+      "tags": ["checkout", "shop"],
+      "inputs": {},
+      "experimental": false
+    }
+  ]
+}

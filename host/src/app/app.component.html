@@ -1,0 +1,22 @@
+<header class="navbar">
+  <a class="logo" routerLink="/">🛒 NexusShop</a>
+  <nav>
+    <a routerLink="/products" routerLinkActive="active">Produkter</a>
+    <a routerLink="/account"  routerLinkActive="active">Konto</a>
+  </nav>
+  <div class="navbar-right">
+    <nexus-component
+      remote="cart"
+      expose="MiniCart"
+      [inputs]="{ itemCount: cartCount() }"
+    />
+  </div>
+</header>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="footer">
+  <p>NexusShop — Nexus micro frontend eksempel</p>
+</footer>

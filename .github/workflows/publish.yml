@@ -17,7 +17,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        remote: [remote-one, remote-two]
+        remote: [remote-catalog, remote-cart, remote-product, remote-checkout, remote-account]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
@@ -43,7 +43,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ matrix.remote }}
           cache-to: type=gha,mode=max,scope=${{ matrix.remote }}
-
-# Resultatet (begge remotes pr. push):
-#   docker pull ghcr.io/bimo-dk/nexus-example/remote-one:latest
-#   docker pull ghcr.io/bimo-dk/nexus-example/remote-two:latest

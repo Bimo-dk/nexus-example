@@ -1,0 +1,6 @@
+{
+  "registryUrl": "${REGISTRY_URL}",
+  "nexusToken": "${NEXUS_TOKEN}",
+  "publicUrl": "${PUBLIC_URL}",
+  "upstreamUrl": "${UPSTREAM_URL}"
+}

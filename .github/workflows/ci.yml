@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        remote: [remote-one, remote-two]
+        remote: [remote-catalog, remote-cart, remote-product, remote-checkout, remote-account]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

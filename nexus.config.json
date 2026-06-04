@@ -1,35 +1,22 @@
 {
+  "projectName": "nexusshop",
+  "description": "NexusShop — Nexus webshop eksempel med 5 remotes der demonstrerer route-baserede sider, komponent-baseret cross-remote composition og automatisk selvregistrering.",
   "environments": {
-    "local-example": {
-      "publicUrl": "http://localhost:8668"
-    },
-    "staging": {
-      "publicUrl": "https://nexus-staging.bimo.dk",
-      "tokenEnv": "NEXUS_STAGING_TOKEN"
-    },
-    "prod": {
-      "publicUrl": "https://nexus.bimo.dk",
-      "tokenEnv": "NEXUS_PROD_TOKEN"
+    "local": {
+      "publicUrl": "http://localhost:8668",
+      "registryUrl": "http://localhost:8668/api"
     }
   },
   "dev": {
-    "baseEnv": "local-example",
+    "baseEnv": "local",
     "proxyPort": 9000,
-    "host": {
-      "mode": "proxy"
-    },
+    "host": { "mode": "proxy" },
     "remotes": {
-      "remoteOne": {
-        "port": 4200,
-        "path": "./remote-one",
-        "autostart": false
-      },
-      "remoteTwo": {
-        "port": 4300,
-        "path": "./remote-two",
-        "autostart": false
-      }
-    },
-    "logRouting": true
+      "catalog":  { "port": 8701, "path": "./remote-catalog",  "autostart": false },
+      "cart":     { "port": 8702, "path": "./remote-cart",     "autostart": false },
+      "product":  { "port": 8703, "path": "./remote-product",  "autostart": false },
+      "checkout": { "port": 8704, "path": "./remote-checkout", "autostart": false },
+      "account":  { "port": 8705, "path": "./remote-account",  "autostart": false }
+    }
   }
 }

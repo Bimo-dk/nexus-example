@@ -1,0 +1,17 @@
+{
+  "remote": "account",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "entries": [
+    {
+      "remote": "account",
+      "expose": "AccountPage",
+      "className": "AccountPageComponent",
+      "title": "Account page",
+      "description": "Kontooversigt med profil og ordrehistorik",
+      "category": "pages",
+      "tags": ["account", "shop"],
+      "inputs": {},
+      "experimental": false
+    }
+  ]
+}

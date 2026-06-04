@@ -1,0 +1,17 @@
+{
+  "remote": "product",
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "entries": [
+    {
+      "remote": "product",
+      "expose": "ProductPage",
+      "className": "ProductPageComponent",
+      "title": "Product detail page",
+      "description": "Produktdetalje med billede, pris, beskrivelse og anmeldelser",
+      "category": "pages",
+      "tags": ["product", "shop"],
+      "inputs": {},
+      "experimental": false
+    }
+  ]
+}
