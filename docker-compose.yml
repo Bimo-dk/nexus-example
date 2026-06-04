@@ -68,6 +68,9 @@ services:
       # Runtime config — gateway substitutes these into /assets/config.json
       HOST_REMOTE_ENTRY: /host/remoteEntry.json
       HOST_EXPOSED_MODULE: ./AppShell
+      # Dynamic remote routing — gateway fetches registered remotes from registry
+      REGISTRY_INTERNAL_URL: http://registry:3000
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     depends_on:
       registry:
         condition: service_healthy
@@ -108,6 +111,14 @@ services:
     container_name: nexus-example-remote-one
     expose:
       - "80"
+    environment:
+      REGISTRY_URL: /api
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      PUBLIC_URL: http://localhost:8668/remotes/remoteOne/remoteEntry.json
+      UPSTREAM_URL: http://remote-one:80
+    depends_on:
+      registry:
+        condition: service_healthy
     networks:
       - nexus-net
     restart: unless-stopped
@@ -120,6 +131,14 @@ services:
     container_name: nexus-example-remote-two
     expose:
       - "80"
+    environment:
+      REGISTRY_URL: /api
+      NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+      PUBLIC_URL: http://localhost:8668/remotes/remoteTwo/remoteEntry.json
+      UPSTREAM_URL: http://remote-two:80
+    depends_on:
+      registry:
+        condition: service_healthy
     networks:
       - nexus-net
     restart: unless-stopped

@@ -25,10 +25,12 @@ RUN node -e "const fs=require('fs'); const p='src/environments/environment.prod.
 RUN npm run build:prod
 
 FROM nginx:alpine
-RUN apk add --no-cache wget
+RUN apk add --no-cache wget gettext
 
 COPY --from=builder /app/dist/remote-one/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.d/40-runtime-config.sh /docker-entrypoint.d/40-runtime-config.sh
+RUN chmod +x /docker-entrypoint.d/40-runtime-config.sh
 
 EXPOSE 80
 
