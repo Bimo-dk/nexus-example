@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { NexusRemote, NexusComponent } from '../nexus-remote.local';
-import { NexusBus } from '../bus.local';
+import { NexusRemote, NexusComponent } from '@bimo-dk/nexus-build';
+import { NexusBus } from '@bimo-dk/nexus-bus';
 
 interface CartAdded { sku: string; qty: number; }
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NexusRemote, NexusComponent } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '@bimo-dk/nexus-build';
 
 @NexusRemote({ exposeAs: 'CalendarHeatmap' })
 @NexusComponent({

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { NexusRemote, NexusComponent } from '../nexus-remote.local';
-import { getUserSignal, userHasAnyRole } from '../user-context.local';
+import { NexusRemote, NexusComponent } from '@bimo-dk/nexus-build';
+import { getUserSignal, userHasAnyRole } from '@bimo-dk/nexus-runtime';
 
 @NexusRemote({ exposeAs: 'UserGreeting' })
 @NexusComponent({

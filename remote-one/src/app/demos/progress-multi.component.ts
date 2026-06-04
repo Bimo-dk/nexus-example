@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { NexusRemote, NexusComponent } from '../nexus-remote.local';
+import { NexusRemote, NexusComponent } from '@bimo-dk/nexus-build';
 
 interface Bar { label: string; value: number; color: string; }
 

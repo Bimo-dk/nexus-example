@@ -5,7 +5,7 @@ import { DynamicNexusService, CatalogService } from '@bimo-dk/nexus-runtime';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
 import { CartBadgeComponent } from './components/cart-badge.component';
-import { setUserSignal, type UserContext } from './user-context.local';
+import { setUserSignal, type UserContext } from '@bimo-dk/nexus-runtime';
 
 // AppShell-level demo user. Lives here (not in app.config.ts) because the
 // gateway boots its own Angular app and federation-loads only `./AppShell`

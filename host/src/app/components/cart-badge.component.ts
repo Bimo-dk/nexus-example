@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NexusBus } from '../bus.local';
-import { USER_CONTEXT } from '../user-context.local';
+import { NexusBus } from '@bimo-dk/nexus-bus';
+import { USER_CONTEXT } from '@bimo-dk/nexus-runtime';
 
 export interface CartAdded {
   sku: string;
