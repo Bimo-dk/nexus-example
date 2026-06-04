@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from '@angular/router';
-import { ComponentLoaderService } from './component-loader.local';
-import { CatalogService, type CatalogEntry } from './catalog.local.service';
+import { ComponentLoaderService, CatalogService, type CatalogEntry } from '@bimo-dk/nexus-runtime';
 
 /**
  * Pattern 1: Route-based loading.

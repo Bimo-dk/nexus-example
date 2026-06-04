@@ -2,13 +2,13 @@ import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription, interval, startWith } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { LocalNexusService } from '../local-nexus.service';
+import { DynamicNexusService } from '@bimo-dk/nexus-runtime';
 
 type RemoteHealthStatus = 'healthy' | 'degraded' | 'down' | 'unknown';
 
 @Injectable({ providedIn: 'root' })
 export class HealthService {
-  private readonly nexus = inject(LocalNexusService);
+  private readonly nexus = inject(DynamicNexusService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly state = signal<Map<string, RemoteHealthStatus>>(new Map());

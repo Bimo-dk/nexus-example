@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { CatalogService, type CatalogEntry } from './catalog.local.service';
-import { NexusComponent } from './nexus-component.local';
+import { CatalogService, type CatalogEntry, NexusComponent } from '@bimo-dk/nexus-runtime';
 
 /**
  * Pattern 3: Drop-in tag.

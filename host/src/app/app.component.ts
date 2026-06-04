@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from '@angular/router';
-import { LocalNexusService } from './local-nexus.service';
+import { DynamicNexusService, CatalogService } from '@bimo-dk/nexus-runtime';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
-import { CatalogService } from './demos/catalog.local.service';
 import { CartBadgeComponent } from './components/cart-badge.component';
 import { setUserSignal, type UserContext } from './user-context.local';
 
@@ -247,7 +246,7 @@ const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
   ],
 })
 export class AppComponent implements OnInit {
-  readonly nexus = inject(LocalNexusService);
+  readonly nexus = inject(DynamicNexusService);
   private readonly health = inject(HealthService);
   private readonly catalog = inject(CatalogService);
   private readonly router = inject(Router);
@@ -259,7 +258,7 @@ export class AppComponent implements OnInit {
     this.registerStaticRoutes();
     console.log(`[host-shell] static routes registered (${this.router.config.length} total)`);
 
-    await this.nexus.initialize('/api', 'dev-token-change-in-production');
+    await this.nexus.initialize();
     this.health.start();
     await this.catalog.refresh();
 

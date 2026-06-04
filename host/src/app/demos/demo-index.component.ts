@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CatalogService } from './catalog.local.service';
+import { CatalogService } from '@bimo-dk/nexus-runtime';
 
 @Component({
   selector: 'app-demo-index',

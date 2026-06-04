@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LocalNexusService } from '../local-nexus.service';
+import { DynamicNexusService } from '@bimo-dk/nexus-runtime';
 import { HealthService } from '../services/health.service';
 
 @Component({
@@ -119,7 +119,7 @@ import { HealthService } from '../services/health.service';
   imports: [RouterLink],
 })
 export class DashboardComponent {
-  readonly nexus = inject(LocalNexusService);
+  readonly nexus = inject(DynamicNexusService);
   private readonly health = inject(HealthService);
 
   healthStatusFor(name: string): string {

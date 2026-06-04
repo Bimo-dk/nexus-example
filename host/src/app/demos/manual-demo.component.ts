@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Type, inject, signal } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { ComponentLoaderService } from './component-loader.local';
-import { CatalogService, type CatalogEntry } from './catalog.local.service';
+import { ComponentLoaderService, CatalogService, type CatalogEntry } from '@bimo-dk/nexus-runtime';
 
 /**
  * Pattern 2: Programmatic loading.
