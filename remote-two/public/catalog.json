@@ -1,7 +1,23 @@
 {
   "remote": "remoteTwo",
-  "generatedAt": "2026-06-03T19:56:30.002Z",
+  "generatedAt": "2026-06-04T05:17:57.065Z",
   "entries": [
+    {
+      "remote": "remoteTwo",
+      "expose": "CartPublisher",
+      "className": "CartPublisherComponent",
+      "title": "Cart Publisher",
+      "description": "Buttons that publish cart:item-added events on the NexusBus",
+      "category": "demo",
+      "tags": [
+        "bus",
+        "pubsub",
+        "demo"
+      ],
+      "icon": "shopping_cart",
+      "inputs": {},
+      "experimental": false
+    },
     {
       "remote": "remoteTwo",
       "expose": "CodeEditor",

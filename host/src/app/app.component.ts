@@ -1,10 +1,25 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, type Routes } from '@angular/router';
 import { LocalNexusService } from './local-nexus.service';
 import { HealthService } from './services/health.service';
 import { DashboardComponent } from './components/dashboard.component';
 import { CatalogService } from './demos/catalog.local.service';
+import { CartBadgeComponent } from './components/cart-badge.component';
+import { setUserSignal, type UserContext } from './user-context.local';
+
+// AppShell-level demo user. Lives here (not in app.config.ts) because the
+// gateway boots its own Angular app and federation-loads only `./AppShell`
+// (= app.component.ts) — app.config.ts top-level code never runs in that
+// context. Registering on globalThis here means federated remotes (remote-one's
+// UserGreeting, etc.) see the user via getUserSignal().
+const demoUser = signal<UserContext | null>({
+  id: 'u-1',
+  name: 'Steffen Vittech',
+  email: 'steffen@vittech.dk',
+  roles: ['user', 'admin'],
+});
+setUserSignal(demoUser);
 
 // Capture original URL at module evaluation time — BEFORE Angular's router has
 // a chance to rewind it on its initial (failed) navigation. Module evaluation
@@ -19,7 +34,7 @@ const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
   selector: 'app-root',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, CartBadgeComponent],
   template: `
     <div class="layout">
       @if (!nexus.registryOnline()) {
@@ -39,6 +54,7 @@ const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
           <a routerLink="/demos" routerLinkActive="active">Demos</a>
         </nav>
         <div class="meta">
+          <app-cart-badge />
           <span class="pill" [class.online]="nexus.registryOnline()" [class.offline]="!nexus.registryOnline()">
             Registry {{ nexus.registryOnline() ? 'online' : 'offline' }}
           </span>
@@ -147,6 +163,7 @@ const NEXUS_INITIAL_URL = (typeof window !== 'undefined')
         font-size: 14px;
       }
       .topnav a.active { color: var(--host-primary-dark); background: #eef2ff; }
+      .meta { display: flex; align-items: center; gap: 12px; }
       .meta .pill {
         font-size: 12px;
         padding: 4px 10px;

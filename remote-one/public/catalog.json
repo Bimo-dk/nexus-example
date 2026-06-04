@@ -1,6 +1,6 @@
 {
   "remote": "remoteOne",
-  "generatedAt": "2026-06-03T19:34:33.337Z",
+  "generatedAt": "2026-06-04T05:17:56.708Z",
   "entries": [
     {
       "remote": "remoteOne",
@@ -245,6 +245,22 @@
           "description": "Array of { label, value, tone }"
         }
       },
+      "experimental": false
+    },
+    {
+      "remote": "remoteOne",
+      "expose": "UserGreeting",
+      "className": "UserGreetingComponent",
+      "title": "User Greeting",
+      "description": "Reads USER_CONTEXT injected by the host and greets the user",
+      "category": "demo",
+      "tags": [
+        "auth",
+        "context",
+        "demo"
+      ],
+      "icon": "person",
+      "inputs": {},
       "experimental": false
     },
     {
