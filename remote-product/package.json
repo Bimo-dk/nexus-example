@@ -22,7 +22,7 @@
     "@angular-architects/native-federation": "^19.0.13",
     "@bimo-dk/nexus-build": "*",
     "@bimo-dk/nexus-core": "*",
-    "@bimo-dk/nexus-runtime": "*",
+    "@bimo-dk/nexus-runtime": "0.2.1",
     "es-module-shims": "^1.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -37,4 +37,3 @@
     "typescript": "~5.6.3"
   }
 }
-

@@ -55,7 +55,7 @@ remote-wishlist:
       - node_auth_token
   expose: ["80"]
   environment:
-    REGISTRY_INTERNAL_URL: http://registry:3000
+    REGISTRY_INTERNAL_URL: http://registry:8670
     NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     PUBLIC_URL: /remotes/wishlist/remoteEntry.json
     UPSTREAM_URL: http://remote-wishlist:80

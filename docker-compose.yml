@@ -20,12 +20,12 @@ services:
     image: ghcr.io/bimo-dk/nexus-registry:latest
     container_name: nexusshop-registry
     ports:
-      - "3000:3000"
+      - "8670:8670"
     expose:
-      - "3000"
+      - "8670"
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       ALLOWED_ORIGINS: http://localhost:8668,http://localhost:8669
       SYSTEM_SERVICES: gateway=http://gateway/health,host=http://host/health,portal=http://portal/health
@@ -33,7 +33,7 @@ services:
     volumes:
       - registry-data:/app/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:8670/health"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -50,7 +50,7 @@ services:
     environment:
       HOST_REMOTE_ENTRY: /host/remoteEntry.json
       HOST_EXPOSED_MODULE: ./AppShell
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     depends_on:
       registry: { condition: service_healthy }
@@ -85,7 +85,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
     depends_on:
       registry: { condition: service_healthy }
@@ -104,7 +104,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       PUBLIC_URL: /remotes/catalog/remoteEntry.json
       UPSTREAM_URL: http://remote-catalog:80
@@ -123,7 +123,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       PUBLIC_URL: /remotes/cart/remoteEntry.json
       UPSTREAM_URL: http://remote-cart:80
@@ -142,7 +142,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       PUBLIC_URL: /remotes/product/remoteEntry.json
       UPSTREAM_URL: http://remote-product:80
@@ -161,7 +161,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       PUBLIC_URL: /remotes/checkout/remoteEntry.json
       UPSTREAM_URL: http://remote-checkout:80
@@ -180,7 +180,7 @@ services:
     expose:
       - "80"
     environment:
-      REGISTRY_INTERNAL_URL: http://registry:3000
+      REGISTRY_INTERNAL_URL: http://registry:8670
       NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
       PUBLIC_URL: /remotes/account/remoteEntry.json
       UPSTREAM_URL: http://remote-account:80
