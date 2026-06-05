@@ -11,7 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideNexusRemote({
       entry: CheckoutPageComponent,
       configDefaults: {
-        registryUrl: 'http://registry:3000',
+        registryUrl: 'http://localhost:8669/api',
         nexusToken: 'dev-token',
       },
     }),

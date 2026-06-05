@@ -24,5 +24,6 @@ module.exports = withNativeFederation({
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
+    '@bimo-dk/nexus-build',
   ],
 });

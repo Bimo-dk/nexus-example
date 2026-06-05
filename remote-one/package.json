@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 8666 --host 0.0.0.0",
+    "start": "ng serve --port 8660 --host 0.0.0.0",
     "prebuild": "nexus-build",
     "build": "ng build",
     "build:prod": "nexus-build && ng build --configuration production",
