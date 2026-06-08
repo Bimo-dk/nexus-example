@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
     provideNexusHost({
       configDefaults: {
         registryUrl: '/api',
-        nexusToken: 'dev-token-change-in-production',
+        nexusToken: 'dev-token',
         staticBackupUrl: '/assets/registry-backup/remotes.json',
       },
     }),

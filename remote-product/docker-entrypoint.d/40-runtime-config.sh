@@ -9,7 +9,7 @@ if [ ! -f "$TEMPLATE" ]; then
   exit 0
 fi
 
-export REGISTRY_URL="${REGISTRY_URL:-http://registry:3000}"
+export REGISTRY_URL="${REGISTRY_URL:-http://registry:8670}"
 export NEXUS_TOKEN="${NEXUS_TOKEN:-dev-token}"
 export PUBLIC_URL="${PUBLIC_URL:-}"
 export UPSTREAM_URL="${UPSTREAM_URL:-}"

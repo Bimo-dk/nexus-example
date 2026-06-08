@@ -1,0 +1,72 @@
+server {
+  listen 80;
+  server_name _;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  add_header X-Frame-Options "SAMEORIGIN" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header X-XSS-Protection "1; mode=block" always;
+  add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+  add_header Access-Control-Allow-Origin "*" always;
+  add_header Access-Control-Allow-Methods "GET, HEAD, OPTIONS" always;
+  add_header Access-Control-Allow-Headers "Content-Type, X-Nexus-Token, X-Request-ID" always;
+
+  if ($request_method = OPTIONS) {
+    return 204;
+  }
+
+  location = /health {
+    default_type application/json;
+    return 200 '{"status":"ok","service":"host"}';
+  }
+
+  location ^~ /registry-backup/ {
+    default_type application/json;
+    add_header Cache-Control "no-store" always;
+    add_header Access-Control-Allow-Origin "*" always;
+    try_files $uri =404;
+  }
+
+  location ^~ /api/ws {
+    proxy_pass ${REGISTRY_ORIGIN};
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_read_timeout 86400;
+  }
+
+  location ^~ /api {
+    proxy_pass ${REGISTRY_ORIGIN};
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_http_version 1.1;
+  }
+
+  location ~* remoteEntry\.(json|js)$ {
+    add_header Cache-Control "no-store, no-cache, must-revalidate" always;
+    add_header Pragma "no-cache" always;
+    add_header Access-Control-Allow-Origin "*" always;
+    try_files $uri =404;
+  }
+
+  location ~* /(chunk|remote)-[^/]+\.js$ {
+    add_header Cache-Control "no-store" always;
+    add_header Access-Control-Allow-Origin "*" always;
+    try_files $uri =404;
+  }
+
+  location ~* \.(?:css|js|woff2?|ttf|otf|eot|svg|png|jpg|jpeg|gif|webp|ico)$ {
+    expires 1y;
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    add_header Access-Control-Allow-Origin "*" always;
+    try_files $uri =404;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}

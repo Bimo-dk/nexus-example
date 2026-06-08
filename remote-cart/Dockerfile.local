@@ -17,12 +17,24 @@ RUN node -e "const fs=require('fs'); const p='src/environments/environment.prod.
 
 RUN npm run build:prod
 
+RUN node -e "\
+const fs=require('fs');\
+const cfg=JSON.parse(fs.readFileSync('federation.config.json','utf8'));\
+const e=Object.keys(cfg.exposes);\
+const m=e.find(k=>k.endsWith('Page'))||e[e.length-1];\
+const d=fs.readdirSync('dist').find(n=>fs.statSync('dist/'+n).isDirectory());\
+const p='dist/'+d+'/browser/assets';\
+fs.mkdirSync(p,{recursive:true});\
+fs.writeFileSync(p+'/remote-reg.json',JSON.stringify({name:cfg.name,exposedModule:m}));\
+console.log('[remote-reg] '+cfg.name+' -> '+m);"
+
 FROM nginx:alpine
 RUN apk add --no-cache wget gettext
 COPY --from=builder /app/dist/remote-cart/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.d/40-runtime-config.sh /docker-entrypoint.d/40-runtime-config.sh
-RUN chmod +x /docker-entrypoint.d/40-runtime-config.sh
+COPY docker-entrypoint.d/50-register.sh /docker-entrypoint.d/50-register.sh
+RUN chmod +x /docker-entrypoint.d/40-runtime-config.sh /docker-entrypoint.d/50-register.sh
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
   CMD wget -qO- http://localhost/health || exit 1

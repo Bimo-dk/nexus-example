@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 8666 --host 0.0.0.0",
+    "start": "ng serve --port 8665 --host 0.0.0.0",
     "prebuild": "nexus-build",
     "build": "ng build",
     "build:prod": "nexus-build && ng build --configuration production",
@@ -20,9 +20,8 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@angular-architects/native-federation": "^19.0.13",
-    "@bimo-dk/nexus-build": "*",
     "@bimo-dk/nexus-core": "*",
-    "@bimo-dk/nexus-runtime": "*",
+    "@bimo-dk/nexus-runtime": "0.2.1",
     "es-module-shims": "^1.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -34,7 +33,7 @@
     "@angular/cli": "^19.0.0",
     "@angular/compiler-cli": "^19.0.0",
     "@types/node": "^22.10.0",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "@bimo-dk/nexus-build": "*"
   }
 }
-

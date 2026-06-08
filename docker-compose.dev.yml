@@ -1,0 +1,121 @@
+name: nexus-example-dev
+
+# ============================================================================
+# Lokal dev-stack — kører kun host + remotes.
+# Forbinder til nexus-test stakken via delt Docker-netvaerk.
+#
+# Krav:
+#   nexus-test stakken skal koere foerst (start.ps1 i nexus-test/).
+#   Den opretter nexus-test_nexus-test-net som dette compose deler.
+#
+# Start:
+#   cd nexus-test && .\start.ps1          # koer dette foerst
+#   cd nexus-example
+#   docker compose -f docker-compose.dev.yml build
+#   docker compose -f docker-compose.dev.yml up -d
+#   docker compose -f docker-compose.dev.yml logs -f
+#
+# Port-kort:
+#   8667  host
+#   8661  remote-catalog
+#   8662  remote-account
+#   8663  remote-cart
+#   8664  remote-checkout
+#   8665  remote-product
+#
+# Env-variable (sæt i de tilhoerende .env filer per service):
+#   REGISTRY_ORIGIN   base-URL til registry uden sti (til host nginx-proxy)
+#   REGISTRY_URL      fuld API-URL til registry (til remote self-registration)
+#   NEXUS_TOKEN       faelles token
+#   PUBLIC_URL        URL browseren bruger til at hente remoteEntry.json
+#   UPSTREAM_URL      intern URL gaten bruger for at proxye til remotet
+# ============================================================================
+
+services:
+
+  host:
+    build:
+      context: ./host
+      dockerfile: Dockerfile.local
+      args:
+        NEXUS_TOKEN: ${NEXUS_TOKEN:-dev-token}
+    container_name: nexus-example-host
+    ports:
+      - "8667:80"
+    env_file: ./host/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+  remote-catalog:
+    build:
+      context: ./remote-catalog
+      dockerfile: Dockerfile.local
+    container_name: nexus-example-catalog
+    ports:
+      - "8661:80"
+    env_file: ./remote-catalog/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+  remote-account:
+    build:
+      context: ./remote-account
+      dockerfile: Dockerfile.local
+    container_name: nexus-example-account
+    ports:
+      - "8662:80"
+    env_file: ./remote-account/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+  remote-cart:
+    build:
+      context: ./remote-cart
+      dockerfile: Dockerfile.local
+    container_name: nexus-example-cart
+    ports:
+      - "8663:80"
+    env_file: ./remote-cart/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+  remote-checkout:
+    build:
+      context: ./remote-checkout
+      dockerfile: Dockerfile.local
+    container_name: nexus-example-checkout
+    ports:
+      - "8664:80"
+    env_file: ./remote-checkout/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+  remote-product:
+    build:
+      context: ./remote-product
+      dockerfile: Dockerfile.local
+    container_name: nexus-example-product
+    ports:
+      - "8665:80"
+    env_file: ./remote-product/.env
+    networks:
+      - nexus-example-net
+      - nexus-test-net
+    restart: unless-stopped
+
+networks:
+  nexus-example-net:
+    driver: bridge
+  nexus-test-net:
+    external: true
+    name: nexus-test_nexus-test-net
